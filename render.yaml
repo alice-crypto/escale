@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: escale
+    runtime: node
+    rootDir: escale/server
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: GEMINI_MODEL
+        value: gemini-3.5-flash-lite
+      - key: FREE_ANALYSES
+        value: "3"

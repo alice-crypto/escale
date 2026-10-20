@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Escale</title>
+  <link rel="stylesheet" href="sidepanel.css">
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <img class="logo" src="icons/icon48.png" alt="" width="28" height="28">
+      <div>
+        <h1>Escale</h1>
+        <p class="tagline">Ton agent pour choisir où partir</p>
+      </div>
+    </div>
+    <span id="credits" class="credits" title="Analyses restantes">…</span>
+  </header>
+
+  <div class="actions">
+    <button id="analyze" class="primary">🔍 Analyser cette page</button>
+    <button id="reset" class="ghost" title="Nouvelle conversation">＋ Nouveau</button>
+  </div>
+
+  <main id="chat">
+    <div class="welcome">
+      <p><strong>Salut 👋</strong></p>
+      <p>Ouvre une page de voyage (hôtel, Airbnb, vol, blog, guide…) et clique sur <strong>Analyser cette page</strong>.</p>
+      <p>Ou dis-moi simplement tes envies : « 10 jours au soleil en mars, 1 200 € depuis Lyon ».</p>
+    </div>
+  </main>
+
+  <section id="paywall" class="paywall" hidden>
+    <p><strong>Tes analyses gratuites sont terminées.</strong></p>
+    <p>Les packs payants (5 analyses pour 2,99 $) arrivent très bientôt dans une mise à jour.</p>
+  </section>
+
+  <form id="composer">
+    <textarea id="input" rows="2" placeholder="Pose ta question…" maxlength="2000"></textarea>
+    <button id="send" class="primary" type="submit" aria-label="Envoyer">➤</button>
+  </form>
+
+  <script src="config.js"></script>
+  <script src="sidepanel.js"></script>
+</body>
+</html>
