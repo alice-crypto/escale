@@ -42,4 +42,4 @@ Aider l'utilisateur à choisir une destination de vacances en analysant, à sa d
 
 Cocher les trois certifications : pas de vente de données, pas d'usage sans rapport avec la fonction, pas d'usage pour le crédit.
 
-**URL de la politique de confidentialité :** https://TON-SERVEUR.onrender.com/confidentialite
+**URL de la politique de confidentialité :** https://escale-luv4.onrender.com/confidentialite
