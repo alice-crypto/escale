@@ -35,6 +35,12 @@ export class AIError extends Error {
   }
 }
 
+export function errorMessage(err) {
+  if (err instanceof AIError && [400, 401, 403].includes(err.status)) return "Clé API Gemini invalide côté serveur.";
+  if (err instanceof AIError && err.status === 429) return "Limite gratuite atteinte pour le moment, réessaie dans une minute.";
+  return "Une erreur est survenue. Réessaie dans un instant.";
+}
+
 async function callGemini(contents) {
   const res = await fetch(API_URL, {
     method: "POST",
@@ -70,9 +76,9 @@ export function deleteConversation(id) {
   conversations.delete(id);
 }
 
-function buildUserText(message, page) {
+function buildUserText(message, page, channelNote) {
   const today = new Date().toISOString().slice(0, 10);
-  let text = `[Date du jour : ${today}]\n\n`;
+  let text = `[Date du jour : ${today}]\n${channelNote ? `[${channelNote}]\n` : ""}\n`;
   if (page) {
     const pageText = String(page.text || "").slice(0, PAGE_TEXT_LIMIT);
     text += `<page url="${escapeAttr(page.url)}" titre="${escapeAttr(page.title)}">\n${pageText}\n</page>\n\n`;
@@ -95,9 +101,9 @@ function describeToolCall(call) {
  * Fait tourner l'agent pour un message utilisateur.
  * `emit` reçoit des événements {type: "status" | "answer" | "error", text}.
  */
-export async function runAgentTurn(conversation, { message, page }, emit) {
+export async function runAgentTurn(conversation, { message, page, channelNote }, emit) {
   const startLength = conversation.contents.length;
-  conversation.contents.push({ role: "user", parts: [{ text: buildUserText(message, page) }] });
+  conversation.contents.push({ role: "user", parts: [{ text: buildUserText(message, page, channelNote) }] });
   conversation.userTurns += 1;
 
   try {

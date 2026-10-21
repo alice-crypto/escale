@@ -13,3 +13,11 @@ services:
         value: gemini-3.5-flash-lite
       - key: FREE_ANALYSES
         value: "3"
+      - key: WHATSAPP_TOKEN
+        sync: false
+      - key: WHATSAPP_PHONE_NUMBER_ID
+        sync: false
+      - key: WHATSAPP_APP_SECRET
+        sync: false
+      - key: WHATSAPP_VERIFY_TOKEN
+        generateValue: true
