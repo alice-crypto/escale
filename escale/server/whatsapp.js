@@ -26,7 +26,8 @@ const queues = new Map(); // clé utilisateur → promesse (traite les messages 
 const seenMessageIds = new Set();
 const stats = { received: 0, badSignature: 0, handled: 0, lastSend: null };
 
-const env = (name) => process.env[name] || "";
+// trim + retrait des guillemets : évite les erreurs de copier-coller dans Render
+const env = (name) => (process.env[name] || "").trim().replace(/^["']|["']$/g, "");
 
 // Le numéro n'est jamais stocké en clair dans le compteur : on le hache.
 const userKey = (phone) => "wa:" + crypto.createHash("sha256").update(phone).digest("hex").slice(0, 32);
