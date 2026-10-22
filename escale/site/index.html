@@ -3,91 +3,271 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Escale – ton agent IA pour choisir où partir</title>
-  <meta name="description" content="Escale est un agent IA qui vérifie la météo réelle, lit les guides de voyage et t'aide à choisir ta destination de vacances.">
-  <meta property="og:title" content="Escale – ton agent IA pour choisir où partir">
-  <meta property="og:description" content="Dis-lui tes envies et ton budget : Escale vérifie la météo réelle et les guides de voyage, et te conseille.">
+  <title>Escale – l'art de choisir son prochain voyage</title>
+  <meta name="description" content="Escale est un agent IA qui vérifie la météo réelle, lit les guides de voyage et vous conseille la destination idéale selon vos envies et votre budget.">
+  <meta property="og:title" content="Escale – l'art de choisir son prochain voyage">
+  <meta property="og:description" content="Votre conseiller voyage IA : météo réelle, guides de voyage, budget. Essayez gratuitement.">
   <meta property="og:image" content="icon.png">
   <link rel="icon" href="favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <!-- ========== SYMBOLES SVG DES ENGINS ========== -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#f3dfa8"/><stop offset=".5" stop-color="#c9a35b"/><stop offset="1" stop-color="#9c7a3c"/>
+      </linearGradient>
+      <linearGradient id="ivory" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#fffdf7"/><stop offset="1" stop-color="#e9e1cf"/>
+      </linearGradient>
+    </defs>
+
+    <symbol id="i-plane" viewBox="0 0 220 70">
+      <path d="M96 33 L74 6 L88 6 L124 31 Z" fill="#d8ccb3"/>
+      <path d="M8 38 L30 37 L14 10 L28 10 L52 36 L160 33 C186 32 206 35 214 39 C206 43 186 46 160 45 L8 41 Z" fill="url(#ivory)" stroke="#c9a35b" stroke-width="1.2"/>
+      <path d="M98 40 L72 66 L88 66 L128 41 Z" fill="url(#ivory)" stroke="#c9a35b" stroke-width="1.2"/>
+      <path d="M60 40 L200 40" stroke="#c9a35b" stroke-width="1.5"/>
+      <g fill="#0b1426" opacity=".75"><circle cx="70" cy="37" r="1.6"/><circle cx="80" cy="37" r="1.6"/><circle cx="90" cy="36.8" r="1.6"/><circle cx="100" cy="36.6" r="1.6"/><circle cx="110" cy="36.4" r="1.6"/><circle cx="120" cy="36.2" r="1.6"/><circle cx="130" cy="36" r="1.6"/><circle cx="140" cy="35.8" r="1.6"/></g>
+      <path d="M196 36 C202 36 207 37 210 39 L198 39 Z" fill="#0b1426" opacity=".8"/>
+    </symbol>
+
+    <symbol id="i-heli" viewBox="0 0 170 90">
+      <g class="rotor"><rect x="10" y="16" width="130" height="3" rx="1.5" fill="#c9a35b"/></g>
+      <path d="M75 19 L75 28" stroke="#c9a35b" stroke-width="3"/>
+      <path d="M100 44 L152 40 L152 46 L100 52 Z" fill="url(#ivory)" stroke="#c9a35b"/>
+      <circle cx="154" cy="42" r="9" fill="none" stroke="#c9a35b" stroke-width="1.5" class="tail-rotor"/>
+      <path d="M40 48 C40 32 58 27 78 27 C98 27 108 36 108 48 C108 60 96 64 78 64 L52 64 C44 64 40 58 40 48 Z" fill="url(#ivory)" stroke="#c9a35b" stroke-width="1.4"/>
+      <path d="M44 46 C46 36 56 32 66 32 L66 48 Z" fill="#0b1426" opacity=".75"/>
+      <path d="M48 72 L104 72 M58 64 L54 72 M92 64 L96 72" stroke="#c9a35b" stroke-width="2.5" stroke-linecap="round"/>
+    </symbol>
+
+    <symbol id="i-train" viewBox="0 0 640 70">
+      <g fill="url(#ivory)" stroke="#c9a35b" stroke-width="1.4">
+        <path d="M6 18 h170 v38 H6 Z" rx="6"/>
+        <path d="M186 18 h170 v38 H186 Z"/>
+        <path d="M366 18 h170 C590 18 628 40 634 56 H366 Z"/>
+      </g>
+      <g fill="#0b1426" opacity=".78">
+        <rect x="20" y="26" width="22" height="12" rx="2"/><rect x="50" y="26" width="22" height="12" rx="2"/><rect x="80" y="26" width="22" height="12" rx="2"/><rect x="110" y="26" width="22" height="12" rx="2"/><rect x="140" y="26" width="22" height="12" rx="2"/>
+        <rect x="200" y="26" width="22" height="12" rx="2"/><rect x="230" y="26" width="22" height="12" rx="2"/><rect x="260" y="26" width="22" height="12" rx="2"/><rect x="290" y="26" width="22" height="12" rx="2"/><rect x="320" y="26" width="22" height="12" rx="2"/>
+        <rect x="380" y="26" width="22" height="12" rx="2"/><rect x="410" y="26" width="22" height="12" rx="2"/><rect x="440" y="26" width="22" height="12" rx="2"/><rect x="470" y="26" width="22" height="12" rx="2"/>
+        <path d="M545 24 C575 24 600 32 612 44 L545 44 Z"/>
+      </g>
+      <path d="M6 46 H600" stroke="#c9a35b" stroke-width="2"/>
+      <g fill="#c9a35b"><circle cx="30" cy="60" r="5"/><circle cx="150" cy="60" r="5"/><circle cx="210" cy="60" r="5"/><circle cx="330" cy="60" r="5"/><circle cx="390" cy="60" r="5"/><circle cx="510" cy="60" r="5"/></g>
+    </symbol>
+
+    <symbol id="i-tram" viewBox="0 0 230 100">
+      <path d="M90 6 L115 22 L140 6" fill="none" stroke="#c9a35b" stroke-width="2"/>
+      <rect x="10" y="22" width="210" height="62" rx="16" fill="url(#ivory)" stroke="#c9a35b" stroke-width="1.4"/>
+      <rect x="10" y="62" width="210" height="6" fill="#c9a35b"/>
+      <g fill="#0b1426" opacity=".78"><rect x="24" y="32" width="30" height="24" rx="4"/><rect x="62" y="32" width="30" height="24" rx="4"/><rect x="100" y="32" width="30" height="24" rx="4"/><rect x="138" y="32" width="30" height="24" rx="4"/><rect x="176" y="32" width="30" height="24" rx="4"/></g>
+      <g fill="#c9a35b"><circle cx="45" cy="88" r="7"/><circle cx="185" cy="88" r="7"/></g>
+    </symbol>
+
+    <symbol id="i-bus" viewBox="0 0 240 110">
+      <rect x="6" y="8" width="228" height="86" rx="14" fill="#0f1d36" stroke="#c9a35b" stroke-width="1.6"/>
+      <g fill="#f3dfa8" opacity=".9"><rect x="20" y="18" width="34" height="26" rx="4"/><rect x="62" y="18" width="34" height="26" rx="4"/><rect x="104" y="18" width="34" height="26" rx="4"/><rect x="146" y="18" width="34" height="26" rx="4"/><rect x="188" y="18" width="34" height="26" rx="4"/></g>
+      <g fill="#f3dfa8" opacity=".55"><rect x="20" y="52" width="34" height="22" rx="4"/><rect x="62" y="52" width="34" height="22" rx="4"/><rect x="104" y="52" width="34" height="22" rx="4"/><rect x="146" y="52" width="34" height="22" rx="4"/></g>
+      <rect x="190" y="52" width="30" height="38" rx="3" fill="#c9a35b" opacity=".85"/>
+      <rect x="6" y="46" width="228" height="3" fill="#c9a35b"/>
+      <g fill="#c9a35b" stroke="#0b1426" stroke-width="3"><circle cx="50" cy="96" r="11"/><circle cx="190" cy="96" r="11"/></g>
+    </symbol>
+
+    <symbol id="i-balloon" viewBox="0 0 90 140">
+      <path d="M45 4 C70 4 86 22 86 44 C86 66 64 82 54 96 L36 96 C26 82 4 66 4 44 C4 22 20 4 45 4 Z" fill="url(#gold)"/>
+      <path d="M45 4 C34 22 30 70 36 96 M45 4 C56 22 60 70 54 96" fill="none" stroke="#fffdf7" stroke-width="2" opacity=".8"/>
+      <path d="M4 44 C30 50 60 50 86 44" fill="none" stroke="#fffdf7" stroke-width="1.5" opacity=".6"/>
+      <path d="M38 96 L37 114 M52 96 L53 114" stroke="#c9a35b" stroke-width="1.5"/>
+      <rect x="34" y="112" width="22" height="16" rx="3" fill="#7a5a2b"/>
+    </symbol>
+
+    <symbol id="i-yacht" viewBox="0 0 260 130">
+      <path d="M128 8 L128 92" stroke="#c9a35b" stroke-width="2.5"/>
+      <path d="M131 12 L196 86 L131 86 Z" fill="url(#ivory)" stroke="#c9a35b"/>
+      <path d="M125 22 L70 86 L125 86 Z" fill="#f3dfa8" opacity=".9"/>
+      <path d="M20 94 L240 94 C232 112 214 120 196 120 L58 120 C40 120 26 110 20 94 Z" fill="#fffdf7" stroke="#c9a35b" stroke-width="1.6"/>
+      <path d="M36 104 H226" stroke="#c9a35b" stroke-width="2"/>
+      <g fill="#0b1426" opacity=".75"><circle cx="90" cy="110" r="2.5"/><circle cx="110" cy="110" r="2.5"/><circle cx="130" cy="110" r="2.5"/><circle cx="150" cy="110" r="2.5"/></g>
+    </symbol>
+
+    <symbol id="i-villa" viewBox="0 0 320 170">
+      <rect x="20" y="70" width="190" height="80" fill="url(#ivory)" stroke="#c9a35b" stroke-width="1.4"/>
+      <path d="M10 72 L115 18 L220 72 Z" fill="#0f1d36" stroke="#c9a35b" stroke-width="1.4"/>
+      <rect x="200" y="96" width="100" height="54" fill="url(#ivory)" stroke="#c9a35b" stroke-width="1.4"/>
+      <rect x="194" y="90" width="112" height="8" fill="#c9a35b"/>
+      <g class="glow" fill="#f3dfa8"><rect x="40" y="88" width="34" height="26" rx="2"/><rect x="96" y="88" width="34" height="26" rx="2"/><rect x="152" y="88" width="34" height="26" rx="2"/><rect x="214" y="108" width="30" height="20" rx="2"/><rect x="256" y="108" width="30" height="20" rx="2"/></g>
+      <rect x="98" y="122" width="30" height="28" rx="2" fill="#c9a35b"/>
+      <path d="M0 150 H320 V160 H0 Z" fill="#c9a35b" opacity=".6"/>
+      <path d="M20 160 H300 V168 H20 Z" fill="#5fb4c4" opacity=".8"/>
+      <path d="M262 150 C258 120 268 98 284 86 M284 86 C276 84 264 88 258 94 M284 86 C292 82 304 86 308 92 M284 86 C282 78 286 70 294 66" fill="none" stroke="#c9a35b" stroke-width="2.5" stroke-linecap="round"/>
+    </symbol>
+  </svg>
+
+  <!-- Barre de progression du voyage -->
+  <div class="journey" aria-hidden="true"><span></span></div>
+
   <header class="nav">
-    <a class="brand" href="#"><img src="icon.png" alt="" width="32" height="32"> Escale</a>
-    <a class="nav-cta" href="#essayer">Essayer</a>
+    <a class="brand" href="#"><img src="icon.png" alt="" width="34" height="34"><span>Escale</span></a>
+    <nav><a href="#comment">Comment</a><a href="#essayer" class="nav-cta">Essayer</a></nav>
   </header>
 
   <main>
-    <section class="hero">
-      <h1>Tu hésites ?<br><span>Demande à Escale.</span></h1>
-      <p>Un agent IA qui vérifie la <strong>météo réelle</strong> de tes dates, lit les <strong>guides de voyage</strong> et te dit où partir, selon ton budget.</p>
-      <div class="hero-actions">
-        <a class="btn primary" href="#essayer">Essayer gratuitement</a>
-        <a class="btn ghost" href="#extension">Extension Chrome</a>
+    <!-- ===== HERO : ciel de nuit, avion qui traverse ===== -->
+    <section class="hero scene" data-scene>
+      <div class="sky" aria-hidden="true">
+        <div class="stars"></div>
+        <div class="cloud c1" data-parallax="0.25"></div>
+        <div class="cloud c2" data-parallax="0.45"></div>
+        <div class="cloud c3" data-parallax="0.15"></div>
+        <svg class="contrail" viewBox="0 0 1000 400" preserveAspectRatio="none"><path d="M-40 360 C 250 330 520 220 1040 40" pathLength="1"/></svg>
+        <svg class="ride plane" aria-hidden="true"><use href="#i-plane"/></svg>
+        <div class="horizon"></div>
       </div>
-      <p class="small">3 analyses offertes · sans inscription</p>
+      <div class="hero-content">
+        <p class="eyebrow">Agent IA · Météo réelle · Guides de voyage</p>
+        <h1>L'art de choisir<br><em>son prochain voyage.</em></h1>
+        <p class="lead">Dites à Escale vos envies, vos dates et votre budget. Il vérifie la météo réelle, lit les guides de voyage et vous recommande la destination idéale.</p>
+        <div class="hero-actions">
+          <a class="btn gold" href="#essayer">Parler à Escale</a>
+          <a class="btn line" href="#extension">Extension Chrome</a>
+        </div>
+        <p class="note">3 analyses offertes · sans inscription</p>
+      </div>
+      <a class="scroll-hint" href="#comment" aria-label="Faire défiler"><span></span></a>
     </section>
 
-    <section class="steps">
-      <h2>Comment ça marche</h2>
-      <ol>
-        <li><span class="num">1</span><div><strong>Dis tes envies</strong><p>« 7 jours au soleil en décembre, 500 000 FCFA à deux depuis Douala »</p></div></li>
-        <li><span class="num">2</span><div><strong>L'agent vérifie</strong><p>Météo réelle de la période, guides des destinations, budget.</p></div></li>
-        <li><span class="num">3</span><div><strong>Tu choisis</strong><p>Une recommandation claire, avec des alternatives et les pièges à éviter.</p></div></li>
-      </ol>
+    <!-- ===== COMMENT : le train traverse ===== -->
+    <section id="comment" class="how scene" data-scene>
+      <div class="wrap">
+        <p class="eyebrow dark">Comment ça marche</p>
+        <h2>Trois étapes, <em>zéro hésitation.</em></h2>
+        <ol class="steps">
+          <li><span class="num">I</span><h3>Vos envies</h3><p>« 7 jours au soleil en décembre, 500 000 FCFA à deux depuis Douala. »</p></li>
+          <li><span class="num">II</span><h3>L'agent enquête</h3><p>Météo réelle de vos dates, guides des destinations, ordre de grandeur des prix.</p></li>
+          <li><span class="num">III</span><h3>Vous choisissez</h3><p>Une recommandation claire, des alternatives et les pièges à éviter.</p></li>
+        </ol>
+      </div>
+      <div class="rail" aria-hidden="true">
+        <svg class="ride train"><use href="#i-train"/></svg>
+        <div class="track"></div>
+      </div>
     </section>
 
+    <!-- ===== ATOUTS : l'hélicoptère survole ===== -->
+    <section class="perks scene" data-scene>
+      <svg class="ride heli" aria-hidden="true"><use href="#i-heli"/></svg>
+      <div class="wrap">
+        <p class="eyebrow">Ce qui change tout</p>
+        <h2>Un conseiller qui <em>vérifie</em>,<br>pas qui devine.</h2>
+        <div class="perk-grid">
+          <article class="perk"><span class="perk-icon">☀︎</span><h3>Météo réelle</h3><p>Prévisions pour vos dates, ou climat observé à la même période, ville par ville.</p></article>
+          <article class="perk"><span class="perk-icon">❦</span><h3>Guides de voyage</h3><p>Quartiers, incontournables, transports et sécurité, tirés des guides de voyage.</p></article>
+          <article class="perk"><span class="perk-icon">◈</span><h3>Budget maîtrisé</h3><p>Des idées qui tiennent dans votre enveloppe, en FCFA comme en euros.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== CHAT ===== -->
     <section id="essayer" class="try">
-      <h2>Essaie maintenant</h2>
-      <div class="chat-card">
-        <div class="chat-head">
-          <div class="brand small-brand"><img src="icon.png" alt="" width="24" height="24"> Escale</div>
-          <span id="credits" class="credits">…</span>
-        </div>
-        <div id="chat" class="chat" aria-live="polite">
-          <div class="msg agent">Salut 👋 Dis-moi où tu pars, quand, avec qui et ton budget. Je m'occupe du reste.</div>
-          <div class="suggestions">
-            <button type="button" data-q="7 jours au soleil en décembre, 500 000 FCFA à deux depuis Douala. Où aller ?">☀️ Soleil en décembre depuis Douala</button>
-            <button type="button" data-q="Week-end en amoureux en février depuis Paris, budget 600 €. Des idées ?">💕 Week-end depuis Paris</button>
-            <button type="button" data-q="Lisbonne ou Marrakech pour 10 jours en mars ?">🤔 Lisbonne ou Marrakech ?</button>
+      <div class="wrap">
+        <p class="eyebrow dark">Votre conseiller privé</p>
+        <h2>Essayez <em>maintenant.</em></h2>
+        <div class="chat-card">
+          <div class="chat-head">
+            <div class="brand small"><img src="icon.png" alt="" width="26" height="26"><span>Escale</span></div>
+            <span id="credits" class="credits">…</span>
           </div>
+          <div id="chat" class="chat" aria-live="polite">
+            <div class="msg agent">Bonjour ✨ Dites-moi où vous rêvez d'aller, quand, avec qui et votre budget. Je m'occupe du reste.</div>
+            <div class="suggestions">
+              <button type="button" data-q="7 jours au soleil en décembre, 500 000 FCFA à deux depuis Douala. Où aller ?">☀️ Soleil en décembre depuis Douala</button>
+              <button type="button" data-q="Week-end en amoureux en février depuis Paris, budget 600 €. Des idées ?">💕 Week-end chic depuis Paris</button>
+              <button type="button" data-q="Lisbonne ou Marrakech pour 10 jours en mars ?">🤔 Lisbonne ou Marrakech ?</button>
+            </div>
+          </div>
+          <div id="paywall" class="paywall" hidden>
+            <strong>Vos analyses gratuites sont terminées.</strong>
+            <p>Les packs payants arrivent très bientôt.</p>
+          </div>
+          <form id="composer" class="composer">
+            <textarea id="input" rows="1" maxlength="2000" placeholder="Décrivez votre voyage idéal…" aria-label="Votre message"></textarea>
+            <button id="send" class="btn gold send" type="submit" aria-label="Envoyer">➤</button>
+          </form>
         </div>
-        <div id="paywall" class="paywall" hidden>
-          <strong>Tes analyses gratuites sont terminées.</strong>
-          <p>Les packs payants arrivent très bientôt.</p>
-        </div>
-        <form id="composer" class="composer">
-          <textarea id="input" rows="1" maxlength="2000" placeholder="Décris ton voyage idéal…" aria-label="Ton message"></textarea>
-          <button id="send" class="btn primary send" type="submit" aria-label="Envoyer">➤</button>
-        </form>
+        <p class="note dark center">Chaque nouvelle conversation utilise une analyse. Écrivez « nouveau » pour en commencer une autre.</p>
       </div>
-      <p class="small center">Chaque nouvelle conversation utilise une analyse. Écris « nouveau » pour en commencer une autre.</p>
     </section>
 
-    <section id="extension" class="channels">
-      <h2>Escale partout</h2>
-      <div class="cards">
-        <div class="card">
-          <div class="card-icon">🧩</div>
-          <h3>Extension Chrome</h3>
-          <p>Sur un hôtel, un Airbnb ou un blog voyage, clique sur « Analyser cette page » : Escale te dit si c'est un bon plan.</p>
-          <a id="chrome-link" class="btn ghost" href="#" aria-disabled="true">Bientôt sur le Chrome Web Store</a>
+    <!-- ===== INSPIRATIONS : tram et bus dans la ville ===== -->
+    <section class="city scene" data-scene>
+      <div class="wrap">
+        <p class="eyebrow">Inspirations</p>
+        <h2>Où partir <em>cette saison ?</em></h2>
+        <div class="dest">
+          <button type="button" data-q="Kribi pour un week-end en décembre : bonne idée ? Que faire ?">Kribi</button>
+          <button type="button" data-q="Zanzibar en décembre : météo, budget et conseils ?">Zanzibar</button>
+          <button type="button" data-q="Dakar pour 5 jours en janvier : qu'en penses-tu ?">Dakar</button>
+          <button type="button" data-q="Marrakech en mars pour un séjour chic : bon choix ?">Marrakech</button>
+          <button type="button" data-q="Lisbonne en avril : météo et incontournables ?">Lisbonne</button>
+          <button type="button" data-q="Santorin en mai pour un voyage de noces : bonne période ?">Santorin</button>
+          <button type="button" data-q="Le Cap en février : météo, sécurité et budget ?">Le Cap</button>
+          <button type="button" data-q="Dubaï en novembre : bonne période pour y aller ?">Dubaï</button>
         </div>
-        <div class="card">
-          <div class="card-icon">💬</div>
-          <h3>WhatsApp</h3>
-          <p>Écris à Escale comme à un ami, directement depuis ton téléphone.</p>
-          <a class="btn ghost" href="#" aria-disabled="true">Bientôt disponible</a>
+      </div>
+      <div class="street" aria-hidden="true">
+        <div class="skyline"></div>
+        <svg class="ride tram"><use href="#i-tram"/></svg>
+        <svg class="ride bus"><use href="#i-bus"/></svg>
+        <div class="road"></div>
+      </div>
+    </section>
+
+    <!-- ===== SÉJOUR : villa et montgolfières ===== -->
+    <section class="stay scene" data-scene>
+      <svg class="ride balloon b1" aria-hidden="true"><use href="#i-balloon"/></svg>
+      <svg class="ride balloon b2" aria-hidden="true"><use href="#i-balloon"/></svg>
+      <div class="wrap stay-grid">
+        <div>
+          <p class="eyebrow dark">Hôtels, villas, locations</p>
+          <h2>Il juge aussi <em>où vous dormez.</em></h2>
+          <p class="lead dark">Avec l'extension Chrome, ouvrez une annonce d'hôtel ou de location, cliquez sur « Analyser cette page » : Escale vous dit si c'est un bon plan pour vos dates, et ce qu'il faut vérifier avant de réserver.</p>
+        </div>
+        <svg class="villa" aria-hidden="true"><use href="#i-villa"/></svg>
+      </div>
+    </section>
+
+    <!-- ===== EXTENSION ===== -->
+    <section id="extension" class="ext">
+      <div class="wrap">
+        <div class="ext-card">
+          <div>
+            <p class="eyebrow">Extension Chrome</p>
+            <h2>Escale, <em>dans votre navigateur.</em></h2>
+            <p class="lead">Analysez n'importe quelle page de voyage en un clic : hôtel, location, vol, blog ou guide.</p>
+          </div>
+          <a id="chrome-link" class="btn line" href="#" aria-disabled="true">Bientôt sur le Chrome Web Store</a>
         </div>
       </div>
     </section>
   </main>
 
-  <footer>
-    <p>© 2026 Escale · <a href="https://escale-luv4.onrender.com/confidentialite">Confidentialité</a> · <a href="mailto:yalakouam@gmail.com">Contact</a></p>
-    <p class="small">Les conseils d'Escale sont indicatifs : vérifie les prix et conditions avant de réserver.</p>
+  <!-- ===== PIED DE PAGE : le yacht sur les vagues ===== -->
+  <footer class="sea scene" data-scene>
+    <svg class="ride yacht" aria-hidden="true"><use href="#i-yacht"/></svg>
+    <div class="waves" aria-hidden="true"></div>
+    <div class="foot">
+      <p class="brand small"><img src="icon.png" alt="" width="24" height="24"><span>Escale</span></p>
+      <p>© 2026 Escale · <a href="https://escale-luv4.onrender.com/confidentialite">Confidentialité</a> · <a href="mailto:yalakouam@gmail.com">Contact</a></p>
+      <p class="tiny">Les conseils d'Escale sont indicatifs : vérifiez prix et conditions avant de réserver.</p>
+    </div>
   </footer>
 
+  <script src="scenes.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

@@ -163,9 +163,12 @@ input.addEventListener("keydown", (e) => {
   }
 });
 
-chat.addEventListener("click", (e) => {
+// Questions suggérées et destinations : on remonte au chat puis on envoie.
+document.addEventListener("click", (e) => {
   const q = e.target.closest("button[data-q]")?.dataset.q;
-  if (q) send(q);
+  if (!q) return;
+  if (!chat.contains(e.target)) document.getElementById("essayer").scrollIntoView({ behavior: "smooth" });
+  send(q);
 });
 
 refreshCredits();
