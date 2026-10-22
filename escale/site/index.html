@@ -113,48 +113,40 @@
     </symbol>
   </svg>
 
-  <!-- Barre de progression du voyage -->
+  <!-- Barre de progression -->
   <div class="journey" aria-hidden="true"><span></span></div>
 
   <header class="nav">
-    <a class="brand" href="#"><img src="icon.png" alt="" width="34" height="34"><span>Escale</span></a>
-    <nav><a href="#comment">Comment</a><a href="#essayer" class="nav-cta">Essayer</a></nav>
+    <a class="brand" href="#" data-goto="accueil"><img src="icon.png" alt="" width="34" height="34"><span>Escale</span></a>
+    <nav><a href="#" data-goto="comment">Comment</a><a href="#" data-goto="essayer" class="nav-cta">Essayer</a></nav>
   </header>
 
-  <main>
-    <!-- ===== HERO ===== -->
-    <section class="hero">
+  <nav class="dots" aria-label="Diapositives"></nav>
+
+  <main class="deck">
+    <!-- 1. ACCUEIL -->
+    <section id="accueil" class="slide hero active" data-title="Accueil">
       <div class="sky" aria-hidden="true">
         <div class="stars"></div>
-        <div class="cloud c1" data-parallax="0.25"></div>
-        <div class="cloud c2" data-parallax="0.45"></div>
-        <div class="cloud c3" data-parallax="0.15"></div>
+        <div class="cloud c1"></div><div class="cloud c2"></div><div class="cloud c3"></div>
         <div class="horizon"></div>
       </div>
-      <div class="hero-content">
+      <div class="slide-inner hero-content">
         <p class="eyebrow">Agent IA · Météo réelle · Guides de voyage</p>
         <h1>L'art de choisir<br><em>son prochain voyage.</em></h1>
         <p class="lead">Dites à Escale vos envies, vos dates et votre budget. Il vérifie la météo réelle, lit les guides de voyage et vous recommande la destination idéale.</p>
         <div class="hero-actions">
-          <a class="btn gold" href="#essayer">Parler à Escale</a>
-          <a class="btn line" href="#extension">Extension Chrome</a>
+          <a class="btn gold" href="#" data-goto="essayer">Parler à Escale</a>
+          <a class="btn line" href="#" data-goto="extension">Extension Chrome</a>
         </div>
         <p class="note">3 analyses offertes · sans inscription</p>
       </div>
-      <a class="scroll-hint" href="#comment" aria-label="Faire défiler"><span></span></a>
+      <button class="scroll-hint" type="button" data-next aria-label="Diapositive suivante"><span></span></button>
     </section>
 
-    <div class="seam seam-plane" data-seam aria-hidden="true">
-      <div class="seam-stage">
-        <div class="seam-fill"></div>
-        <svg class="seam-trail" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M-5 70 C 30 66 62 50 105 22" pathLength="1"/></svg>
-        <svg class="vehicle"><use href="#i-plane"/></svg>
-      </div>
-    </div>
-
-    <!-- ===== COMMENT ===== -->
-    <section id="comment" class="how">
-      <div class="wrap">
+    <!-- 2. COMMENT (entrée en avion) -->
+    <section id="comment" class="slide how" data-tx="plane" data-title="Comment ça marche">
+      <div class="slide-inner wrap">
         <p class="eyebrow dark">Comment ça marche</p>
         <h2>Trois étapes, <em>zéro hésitation.</em></h2>
         <ol class="steps">
@@ -165,17 +157,10 @@
       </div>
     </section>
 
-    <div class="seam seam-train" data-seam aria-hidden="true">
-      <div class="seam-stage">
-        <div class="seam-fill"></div>
-        <div class="seam-rail"></div>
-        <svg class="vehicle"><use href="#i-train"/></svg>
-      </div>
-    </div>
-
-    <!-- ===== ATOUTS ===== -->
-    <section class="perks">
-      <div class="wrap">
+    <!-- 3. ATOUTS (entrée en train) -->
+    <section id="atouts" class="slide perks" data-tx="train" data-title="Ce qui change tout">
+      <div class="stars" aria-hidden="true"></div>
+      <div class="slide-inner wrap">
         <p class="eyebrow">Ce qui change tout</p>
         <h2>Un conseiller qui <em>vérifie</em>,<br>pas qui devine.</h2>
         <div class="perk-grid">
@@ -186,16 +171,9 @@
       </div>
     </section>
 
-    <div class="seam seam-heli" data-seam aria-hidden="true">
-      <div class="seam-stage">
-        <div class="seam-fill"></div>
-        <svg class="vehicle"><use href="#i-heli"/></svg>
-      </div>
-    </div>
-
-    <!-- ===== CHAT ===== -->
-    <section id="essayer" class="try">
-      <div class="wrap">
+    <!-- 4. CHAT (entrée en hélicoptère) -->
+    <section id="essayer" class="slide try" data-tx="heli" data-title="Essayer">
+      <div class="slide-inner wrap">
         <p class="eyebrow dark">Votre conseiller privé</p>
         <h2>Essayez <em>maintenant.</em></h2>
         <div class="chat-card">
@@ -224,20 +202,14 @@
       </div>
     </section>
 
-    <div class="seam seam-city" data-seam aria-hidden="true">
-      <div class="seam-stage">
-        <div class="seam-fill"><div class="skyline"></div></div>
-        <div class="seam-road"></div>
-        <svg class="vehicle tram"><use href="#i-tram"/></svg>
-        <svg class="vehicle bus"><use href="#i-bus"/></svg>
-      </div>
-    </div>
-
-    <!-- ===== INSPIRATIONS ===== -->
-    <section class="city">
-      <div class="wrap">
+    <!-- 5. INSPIRATIONS (entrée en bus + tram) -->
+    <section id="inspirations" class="slide city" data-tx="city" data-title="Inspirations">
+      <div class="skyline" aria-hidden="true"></div>
+      <div class="road" aria-hidden="true"></div>
+      <div class="slide-inner wrap">
         <p class="eyebrow">Inspirations</p>
         <h2>Où partir <em>cette saison ?</em></h2>
+        <p class="lead">Touchez une destination : Escale vous dit tout de suite si c'est le bon moment.</p>
         <div class="dest">
           <button type="button" data-q="Kribi pour un week-end en décembre : bonne idée ? Que faire ?">Kribi</button>
           <button type="button" data-q="Zanzibar en décembre : météo, budget et conseils ?">Zanzibar</button>
@@ -251,18 +223,9 @@
       </div>
     </section>
 
-    <div class="seam seam-balloon" data-seam aria-hidden="true">
-      <div class="seam-stage">
-        <div class="seam-fill"></div>
-        <svg class="vehicle balloon b1"><use href="#i-balloon"/></svg>
-        <svg class="vehicle balloon b2"><use href="#i-balloon"/></svg>
-        <svg class="vehicle balloon b3"><use href="#i-balloon"/></svg>
-      </div>
-    </div>
-
-    <!-- ===== SÉJOUR ===== -->
-    <section class="stay">
-      <div class="wrap stay-grid">
+    <!-- 6. SÉJOUR (entrée en montgolfières) -->
+    <section id="sejour" class="slide stay" data-tx="balloon" data-title="Hôtels et villas">
+      <div class="slide-inner wrap stay-grid">
         <div>
           <p class="eyebrow dark">Hôtels, villas, locations</p>
           <h2>Il juge aussi <em>où vous dormez.</em></h2>
@@ -272,9 +235,9 @@
       </div>
     </section>
 
-    <!-- ===== EXTENSION ===== -->
-    <section id="extension" class="ext">
-      <div class="wrap">
+    <!-- 7. EXTENSION + PIED DE PAGE (entrée en voilier) -->
+    <section id="extension" class="slide sea" data-tx="yacht" data-title="Extension Chrome">
+      <div class="slide-inner wrap">
         <div class="ext-card">
           <div>
             <p class="eyebrow">Extension Chrome</p>
@@ -283,27 +246,31 @@
           </div>
           <a id="chrome-link" class="btn line" href="#" aria-disabled="true">Bientôt sur le Chrome Web Store</a>
         </div>
+        <footer class="foot">
+          <p class="brand small"><img src="icon.png" alt="" width="24" height="24"><span>Escale</span></p>
+          <p>© 2026 Escale · <a href="https://escale-luv4.onrender.com/confidentialite">Confidentialité</a> · <a href="mailto:yalakouam@gmail.com">Contact</a></p>
+          <p class="tiny">Les conseils d'Escale sont indicatifs : vérifiez prix et conditions avant de réserver.</p>
+        </footer>
       </div>
     </section>
-
-    <div class="seam seam-yacht" data-seam aria-hidden="true">
-      <div class="seam-stage">
-        <div class="seam-fill"></div>
-        <div class="seam-waves"></div>
-        <svg class="vehicle"><use href="#i-yacht"/></svg>
-      </div>
-    </div>
   </main>
 
-  <footer class="sea">
-    <div class="foot">
-      <p class="brand small"><img src="icon.png" alt="" width="24" height="24"><span>Escale</span></p>
-      <p>© 2026 Escale · <a href="https://escale-luv4.onrender.com/confidentialite">Confidentialité</a> · <a href="mailto:yalakouam@gmail.com">Contact</a></p>
-      <p class="tiny">Les conseils d'Escale sont indicatifs : vérifiez prix et conditions avant de réserver.</p>
-    </div>
-  </footer>
+  <!-- Les engins qui portent les transitions -->
+  <div class="tx-overlay" aria-hidden="true">
+    <div class="v v-plane"><svg><use href="#i-plane"/></svg></div>
+    <div class="v v-rail"></div>
+    <div class="v v-train"><svg><use href="#i-train"/></svg></div>
+    <div class="v v-heli"><svg><use href="#i-heli"/></svg></div>
+    <div class="v v-tram"><svg><use href="#i-tram"/></svg></div>
+    <div class="v v-bus"><svg><use href="#i-bus"/></svg></div>
+    <div class="v v-balloon b1"><svg><use href="#i-balloon"/></svg></div>
+    <div class="v v-balloon b2"><svg><use href="#i-balloon"/></svg></div>
+    <div class="v v-balloon b3"><svg><use href="#i-balloon"/></svg></div>
+    <div class="v v-waves"></div>
+    <div class="v v-yacht"><svg><use href="#i-yacht"/></svg></div>
+  </div>
 
-  <script src="scenes.js"></script>
+  <script src="deck.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

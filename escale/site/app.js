@@ -167,7 +167,7 @@ input.addEventListener("keydown", (e) => {
 document.addEventListener("click", (e) => {
   const q = e.target.closest("button[data-q]")?.dataset.q;
   if (!q) return;
-  if (!chat.contains(e.target)) document.getElementById("essayer").scrollIntoView({ behavior: "smooth" });
+  if (!chat.contains(e.target)) window.deckGoTo?.("essayer");
   send(q);
 });
 
