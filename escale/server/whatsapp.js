@@ -24,6 +24,7 @@ const WELCOME =
 const chats = new Map(); // clé utilisateur → { conversationId, conversation, lastAt }
 const queues = new Map(); // clé utilisateur → promesse (traite les messages d'une personne un par un)
 const seenMessageIds = new Set();
+const stats = { received: 0, badSignature: 0, handled: 0, lastSend: null };
 
 const env = (name) => process.env[name] || "";
 
@@ -46,7 +47,13 @@ async function graphPost(body) {
     body: JSON.stringify({ messaging_product: "whatsapp", ...body }),
     signal: AbortSignal.timeout(15_000),
   });
-  if (!res.ok) console.error("WhatsApp API", res.status, await res.text().catch(() => ""));
+  if (res.ok) {
+    stats.lastSend = "ok";
+  } else {
+    const detail = await res.text().catch(() => "");
+    stats.lastSend = `erreur ${res.status} : ${detail.slice(0, 300)}`;
+    console.error("WhatsApp API", res.status, detail);
+  }
 }
 
 async function sendText(to, text) {
@@ -160,7 +167,22 @@ async function handleMessage(msg) {
 
 export function setupWhatsApp(app) {
   // Vérification de l'adresse par Meta (une seule fois, à la configuration).
+  // Diagnostic : indique quels réglages sont présents (jamais leur valeur).
+  app.get("/whatsapp/status", (req, res) => {
+    res.json({
+      WHATSAPP_TOKEN: Boolean(env("WHATSAPP_TOKEN")),
+      WHATSAPP_PHONE_NUMBER_ID: Boolean(env("WHATSAPP_PHONE_NUMBER_ID")),
+      WHATSAPP_APP_SECRET: Boolean(env("WHATSAPP_APP_SECRET")),
+      WHATSAPP_VERIFY_TOKEN: Boolean(env("WHATSAPP_VERIFY_TOKEN")),
+      webhooksRecus: stats.received,
+      signaturesRefusees: stats.badSignature,
+      messagesTraites: stats.handled,
+      dernierEnvoi: stats.lastSend,
+    });
+  });
+
   app.get("/whatsapp", (req, res) => {
+    console.log("WhatsApp : demande de vérification du webhook par Meta");
     const ok =
       req.query["hub.mode"] === "subscribe" &&
       env("WHATSAPP_VERIFY_TOKEN") &&
@@ -171,7 +193,12 @@ export function setupWhatsApp(app) {
 
   // Messages reçus.
   app.post("/whatsapp", (req, res) => {
-    if (!isValidSignature(req)) return res.sendStatus(401);
+    stats.received += 1;
+    if (!isValidSignature(req)) {
+      stats.badSignature += 1;
+      console.warn("WhatsApp : signature invalide (vérifie WHATSAPP_APP_SECRET dans Render)");
+      return res.sendStatus(401);
+    }
     res.sendStatus(200); // on répond tout de suite à Meta, le traitement continue ensuite
 
     for (const entry of req.body?.entry ?? []) {
@@ -181,6 +208,8 @@ export function setupWhatsApp(app) {
           seenMessageIds.add(msg.id);
           if (seenMessageIds.size > 5000) seenMessageIds.delete(seenMessageIds.values().next().value);
 
+          console.log(`WhatsApp : message reçu (type ${msg.type})`);
+          stats.handled += 1;
           const key = userKey(msg.from);
           const previous = queues.get(key) ?? Promise.resolve();
           const next = previous
