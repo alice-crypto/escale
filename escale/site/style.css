@@ -9,22 +9,17 @@
   --gold: #c9a35b;
   --gold-light: #f3dfa8;
   --gold-deep: #9c7a3c;
+  --dawn: #fbe9d7;
   --sea: #1f5f74;
+  --sea-light: #2b7a8f;
   --line: rgba(201, 163, 91, 0.35);
   --serif: "Cormorant Garamond", Georgia, serif;
   --sans: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
-  --p: 0; /* progression de la scène (0 → 1), mise à jour en JS */
 }
 
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
-body {
-  margin: 0;
-  background: var(--ivory);
-  color: var(--ink);
-  font: 16px/1.65 var(--sans);
-  overflow-x: hidden;
-}
+body { margin: 0; background: var(--ivory); color: var(--ink); font: 16px/1.65 var(--sans); overflow-x: hidden; }
 a { color: inherit; }
 h1, h2, h3 { font-family: var(--serif); font-weight: 600; letter-spacing: -0.01em; }
 h1 em, h2 em { font-style: italic; font-weight: 500; color: var(--gold); }
@@ -32,17 +27,12 @@ h1 em, h2 em { font-style: italic; font-weight: 500; color: var(--gold); }
 .center { text-align: center; }
 
 /* ---------- Barre de progression ---------- */
-.journey { position: fixed; inset: 0 0 auto 0; height: 3px; z-index: 50; background: transparent; }
+.journey { position: fixed; inset: 0 0 auto 0; height: 3px; z-index: 50; }
 .journey span { display: block; height: 100%; width: calc(var(--page, 0) * 100%); background: linear-gradient(90deg, var(--gold-deep), var(--gold-light)); }
 
 /* ---------- Navigation ---------- */
-.nav {
-  position: fixed; top: 0; left: 0; right: 0; z-index: 40;
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 14px 24px; color: var(--ivory);
-  transition: background .4s, backdrop-filter .4s, box-shadow .4s;
-}
-.nav.solid { background: rgba(11, 20, 38, 0.82); backdrop-filter: blur(10px); box-shadow: 0 1px 0 var(--line); }
+.nav { position: fixed; top: 0; left: 0; right: 0; z-index: 40; display: flex; align-items: center; justify-content: space-between; padding: 14px 24px; color: var(--ivory); transition: background .4s, box-shadow .4s; }
+.nav.solid { background: rgba(11, 20, 38, 0.85); backdrop-filter: blur(10px); box-shadow: 0 1px 0 var(--line); }
 .brand { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; font-family: var(--serif); font-size: 26px; font-weight: 600; }
 .brand img { border-radius: 9px; }
 .brand.small { font-size: 20px; margin: 0; }
@@ -50,19 +40,14 @@ h1 em, h2 em { font-style: italic; font-weight: 500; color: var(--gold); }
 .nav nav a { text-decoration: none; opacity: .9; }
 .nav-cta { border: 1px solid var(--gold); border-radius: 999px; padding: 6px 16px; color: var(--gold-light); }
 
-/* ---------- Boutons ---------- */
-.btn {
-  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-  padding: 14px 26px; border-radius: 999px; font: 600 15px var(--sans); letter-spacing: .02em;
-  text-decoration: none; cursor: pointer; border: 1px solid transparent; transition: transform .2s, box-shadow .2s, background .2s;
-}
+/* ---------- Boutons & textes ---------- */
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 14px 26px; border-radius: 999px; font: 600 15px var(--sans); letter-spacing: .02em; text-decoration: none; cursor: pointer; border: 1px solid transparent; transition: transform .2s, box-shadow .2s, background .2s; }
 .btn.gold { background: linear-gradient(135deg, var(--gold-light), var(--gold) 55%, var(--gold-deep)); color: var(--night); box-shadow: 0 10px 30px -10px rgba(201, 163, 91, .7); }
 .btn.gold:hover { transform: translateY(-2px); box-shadow: 0 16px 34px -12px rgba(201, 163, 91, .9); }
 .btn.line { border-color: var(--gold); color: var(--gold-light); background: transparent; }
 .btn.line:hover { background: rgba(201, 163, 91, .12); }
 .btn[aria-disabled="true"] { opacity: .65; pointer-events: none; }
 .btn:disabled { opacity: .5; cursor: default; transform: none; }
-
 .eyebrow { text-transform: uppercase; letter-spacing: .28em; font-size: 12px; font-weight: 600; color: var(--gold); margin: 0 0 14px; }
 .eyebrow.dark { color: var(--gold-deep); }
 .lead { font-size: 18px; color: var(--muted-light); max-width: 600px; }
@@ -71,39 +56,26 @@ h1 em, h2 em { font-style: italic; font-weight: 500; color: var(--gold); }
 .note.dark { color: var(--muted); }
 .tiny { font-size: 12px; opacity: .7; }
 
-/* ---------- Scènes & engins ---------- */
-.scene { position: relative; overflow: hidden; }
-.ride { position: absolute; pointer-events: none; will-change: transform; filter: drop-shadow(0 12px 18px rgba(0, 0, 0, .25)); }
+.stars { position: absolute; inset: 0; background-image:
+  radial-gradient(1.2px 1.2px at 12% 18%, #fff 60%, transparent), radial-gradient(1px 1px at 28% 8%, #fff 60%, transparent),
+  radial-gradient(1.4px 1.4px at 46% 22%, #fff 60%, transparent), radial-gradient(1px 1px at 63% 12%, #fff 60%, transparent),
+  radial-gradient(1.3px 1.3px at 82% 26%, #fff 60%, transparent), radial-gradient(1px 1px at 91% 6%, #fff 60%, transparent),
+  radial-gradient(1px 1px at 6% 40%, #fff 60%, transparent), radial-gradient(1.2px 1.2px at 38% 44%, #fff 60%, transparent),
+  radial-gradient(1px 1px at 74% 40%, #fff 60%, transparent), radial-gradient(1.1px 1.1px at 55% 64%, #fff 60%, transparent),
+  radial-gradient(1px 1px at 18% 70%, #fff 60%, transparent), radial-gradient(1.2px 1.2px at 88% 72%, #fff 60%, transparent);
+  animation: twinkle 5s ease-in-out infinite alternate; }
+@keyframes twinkle { from { opacity: .45; } to { opacity: 1; } }
 
 /* ---------- HERO ---------- */
-.hero { min-height: 100vh; min-height: 100svh; display: grid; place-items: center; color: var(--ivory); padding: 110px 16px 90px; }
+.hero { position: relative; overflow: hidden; min-height: 100vh; min-height: 100svh; display: grid; place-items: center; color: var(--ivory); padding: 110px 16px 90px; background: var(--night); }
 .sky { position: absolute; inset: 0; background:
   radial-gradient(120% 80% at 70% 110%, #f2b880 0%, #c9746b 18%, #5a3d6b 38%, transparent 62%),
   linear-gradient(180deg, #060c19 0%, var(--night) 45%, #1c2547 100%); }
-.stars { position: absolute; inset: 0; background-image:
-  radial-gradient(1.2px 1.2px at 12% 18%, #fff 60%, transparent),
-  radial-gradient(1px 1px at 28% 8%, #fff 60%, transparent),
-  radial-gradient(1.4px 1.4px at 46% 22%, #fff 60%, transparent),
-  radial-gradient(1px 1px at 63% 12%, #fff 60%, transparent),
-  radial-gradient(1.3px 1.3px at 82% 26%, #fff 60%, transparent),
-  radial-gradient(1px 1px at 91% 6%, #fff 60%, transparent),
-  radial-gradient(1px 1px at 6% 40%, #fff 60%, transparent),
-  radial-gradient(1.2px 1.2px at 38% 44%, #fff 60%, transparent),
-  radial-gradient(1px 1px at 74% 40%, #fff 60%, transparent);
-  animation: twinkle 5s ease-in-out infinite alternate; }
-@keyframes twinkle { from { opacity: .45; } to { opacity: 1; } }
 .cloud { position: absolute; border-radius: 50%; background: radial-gradient(closest-side, rgba(255, 240, 230, .35), transparent); filter: blur(6px); }
 .cloud.c1 { width: 520px; height: 120px; left: -80px; top: 62%; }
 .cloud.c2 { width: 420px; height: 90px; right: -60px; top: 48%; }
 .cloud.c3 { width: 300px; height: 70px; left: 40%; top: 74%; }
-.horizon { position: absolute; left: 0; right: 0; bottom: 0; height: 120px; background: linear-gradient(180deg, transparent, rgba(11, 20, 38, .9)); }
-.contrail { position: absolute; inset: 0; width: 100%; height: 100%; }
-.contrail path { fill: none; stroke: rgba(255, 253, 247, .55); stroke-width: 2; stroke-dasharray: 1; stroke-dashoffset: calc(1 - (0.25 + var(--p) * 0.9)); stroke-linecap: round; filter: blur(.4px); }
-.plane {
-  width: clamp(150px, 22vw, 260px); height: clamp(48px, 7vw, 84px);
-  left: 0; top: 0;
-  transform: translate(calc(-20vw + var(--p) * 130vw), calc(78vh - var(--p) * 75vh)) rotate(-14deg);
-}
+.horizon { position: absolute; left: 0; right: 0; bottom: 0; height: 160px; background: linear-gradient(180deg, transparent, var(--night)); }
 .hero-content { position: relative; z-index: 2; text-align: center; max-width: 760px; }
 .hero h1 { font-size: clamp(44px, 8.5vw, 92px); line-height: 1.02; margin: 0 0 22px; }
 .hero .lead { margin: 0 auto 30px; }
@@ -112,34 +84,101 @@ h1 em, h2 em { font-style: italic; font-weight: 500; color: var(--gold); }
 .scroll-hint span { position: absolute; left: 50%; top: 8px; width: 4px; height: 8px; margin-left: -2px; border-radius: 2px; background: var(--gold-light); animation: scrollhint 1.8s ease-in-out infinite; }
 @keyframes scrollhint { 0% { transform: translateY(0); opacity: 1; } 80% { transform: translateY(14px); opacity: 0; } 100% { opacity: 0; } }
 
-/* ---------- COMMENT (train) ---------- */
-.how { padding: 110px 0 190px; background: var(--ivory); }
+/* =====================================================================
+   TRANSITIONS PLEIN ÉCRAN : l'écran reste fixe pendant qu'on défile,
+   l'engin traverse et dévoile la section suivante derrière lui.
+   --t = progression (0 → 1), --fade = visibilité de la légende.
+   ===================================================================== */
+.tx { position: relative; height: 230vh; --t: 0; --fade: 0; }
+.tx-stage { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden; }
+.tx-layer { position: absolute; inset: 0; }
+.vehicle { position: absolute; left: 0; top: 0; z-index: 2; will-change: transform; filter: drop-shadow(0 24px 30px rgba(0, 0, 0, .28)); }
+.tx-caption {
+  position: absolute; left: 50%; top: 16%; translate: -50% 0; z-index: 3; margin: 0; white-space: nowrap;
+  font: italic 500 clamp(30px, 6vw, 72px) var(--serif); letter-spacing: .02em; color: var(--gold);
+  opacity: var(--fade); transform: translateY(calc((1 - var(--fade)) * 20px));
+  text-shadow: 0 2px 24px rgba(11, 20, 38, .25);
+}
+
+/* ✈️ Avion : de la nuit vers l'ivoire, de gauche à droite */
+.tx-plane .from { background: linear-gradient(180deg, var(--night) 0%, #16203d 100%); }
+.tx-plane .to { background: radial-gradient(90% 70% at 30% 40%, #fffaf0, var(--ivory)); clip-path: inset(0 max(0px, calc(130vw - var(--t) * 160vw)) 0 0); }
+.tx-plane .vehicle {
+  width: clamp(340px, 64vw, 980px); aspect-ratio: 3 / 1; height: auto;
+  transform: translate(calc(var(--t) * 160vw - 72vw), calc(58vh - var(--t) * 36vh)) rotate(calc(-4deg - var(--t) * 6deg));
+}
+.contrail-big { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1; }
+.contrail-big path { fill: none; stroke: rgba(201, 163, 91, .55); stroke-width: .35; stroke-linecap: round; stroke-dasharray: 1 1; stroke-dashoffset: calc(1 - var(--t) * 1.1); stroke-width: .5; }
+
+/* 🚄 Train : de l'ivoire vers la nuit, de droite à gauche */
+.tx-train .from { background: var(--ivory); }
+.tx-train .to { background: linear-gradient(180deg, #060c19, var(--night)); clip-path: inset(0 0 0 max(0px, calc(175vw - var(--t) * 280vw))); }
+.tx-train .vehicle { width: 150vw; aspect-ratio: 640 / 70; height: auto; top: auto; bottom: 22vh; transform: translateX(calc(100vw - var(--t) * 280vw)) scaleX(-1); }
+.tx-track { position: absolute; left: 0; right: 0; bottom: calc(22vh - 14px); height: 12px; z-index: 1; border-top: 2px solid var(--gold); background: repeating-linear-gradient(90deg, var(--gold-deep) 0 3px, transparent 3px 26px); }
+
+/* 🚁 Hélicoptère : de la nuit vers l'ivoire, de haut en bas */
+.tx-heli .from { background: var(--night); }
+.tx-heli .to { background: radial-gradient(80% 60% at 50% 0%, #fffaf0, var(--ivory)); clip-path: inset(0 0 max(0px, calc(119vh - var(--t) * 140vh)) 0); }
+.tx-heli .vehicle { height: 30vh; aspect-ratio: 170 / 90; width: auto; transform: translate(calc(50vw - 28vh + sin(var(--t) * 9rad) * 4vw), calc(var(--t) * 140vh - 29vh)) rotate(calc(sin(var(--t) * 9rad) * -3deg)); }
+.tx-edge { position: absolute; left: 0; right: 0; top: 0; height: 2px; z-index: 1; background: linear-gradient(90deg, transparent, var(--gold), transparent); transform: translateY(calc(var(--t) * 140vh - 19vh)); }
+.rotor { transform-box: fill-box; transform-origin: center; animation: rotor .16s linear infinite; }
+@keyframes rotor { 0%, 100% { transform: scaleX(1); } 50% { transform: scaleX(.1); } }
+.tail-rotor { transform-box: fill-box; transform-origin: center; animation: spin .3s linear infinite; stroke-dasharray: 10 6; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* 🚌 Ville : de l'ivoire vers la nuit, le bus de gauche à droite, le tram en sens inverse */
+.tx-city .from { background: var(--ivory); }
+.tx-city .to { background: linear-gradient(180deg, var(--night-2), var(--night)); clip-path: inset(0 max(0px, calc(135vw - var(--t) * 160vw)) 0 0); z-index: 1; }
+.skyline { position: absolute; left: 0; right: 0; bottom: 14vh; height: 48vh; opacity: .45;
+  background:
+    linear-gradient(var(--gold-deep), var(--gold-deep)) 4% 100% / 5% 50% no-repeat, linear-gradient(var(--gold-deep), var(--gold-deep)) 10% 100% / 4% 80% no-repeat,
+    linear-gradient(var(--gold-deep), var(--gold-deep)) 17% 100% / 6% 38% no-repeat, linear-gradient(var(--gold-deep), var(--gold-deep)) 27% 100% / 3% 100% no-repeat,
+    linear-gradient(var(--gold-deep), var(--gold-deep)) 33% 100% / 7% 48% no-repeat, linear-gradient(var(--gold-deep), var(--gold-deep)) 45% 100% / 4% 72% no-repeat,
+    linear-gradient(var(--gold-deep), var(--gold-deep)) 53% 100% / 6% 36% no-repeat, linear-gradient(var(--gold-deep), var(--gold-deep)) 63% 100% / 3% 88% no-repeat,
+    linear-gradient(var(--gold-deep), var(--gold-deep)) 70% 100% / 8% 44% no-repeat, linear-gradient(var(--gold-deep), var(--gold-deep)) 82% 100% / 4% 66% no-repeat,
+    linear-gradient(var(--gold-deep), var(--gold-deep)) 90% 100% / 6% 54% no-repeat; }
+.tx-road { position: absolute; left: 0; right: 0; bottom: 0; height: 14vh; z-index: 1; background: #070d1a; border-top: 2px solid var(--gold);
+  background-image: repeating-linear-gradient(90deg, var(--gold-light) 0 40px, transparent 40px 90px); background-size: 100% 3px; background-position: 0 50%; background-repeat: repeat-x; }
+.tx-city .tram { z-index: 2; width: clamp(220px, 28vw, 380px); aspect-ratio: 230 / 100; height: auto; top: auto; bottom: 14vh; opacity: .9; transform: translateX(calc(110vw - var(--t) * 150vw)); }
+.tx-city .bus { z-index: 3; width: clamp(260px, 40vw, 560px); aspect-ratio: 240 / 110; height: auto; top: auto; bottom: 7vh; transform: translateX(calc(var(--t) * 160vw - 50vw)); }
+.tx-city .tx-caption { z-index: 4; }
+
+/* 🎈 Montgolfières : de la nuit vers l'aube, de bas en haut */
+.tx-balloon .from { background: var(--night); }
+.tx-balloon .to { background: linear-gradient(180deg, #f6c9a0 0%, var(--dawn) 55%, var(--dawn) 100%); clip-path: inset(max(0px, calc(100vh - var(--t) * 130vh)) 0 0 0); }
+.tx-balloon .balloon { aspect-ratio: 90 / 140; width: auto; }
+.tx-balloon .b1 { height: 34vh; transform: translate(14vw, calc(100vh - var(--t) * 130vh - 20vh)) rotate(calc(sin(var(--t) * 7rad) * 3deg)); }
+.tx-balloon .b2 { height: 22vh; opacity: .9; transform: translate(58vw, calc(112vh - var(--t) * 130vh - 10vh)) rotate(calc(sin(var(--t) * 9rad) * -3deg)); }
+.tx-balloon .b3 { height: 28vh; transform: translate(78vw, calc(104vh - var(--t) * 130vh - 18vh)) rotate(calc(sin(var(--t) * 8rad) * 2deg)); }
+
+/* ⛵ Voilier : la mer monte et emporte le voilier */
+.tx-yacht .from { background: var(--ivory); }
+.tx-yacht .to { background: linear-gradient(180deg, var(--sea-light), var(--sea)); clip-path: inset(max(0px, calc(100vh - var(--t) * 115vh)) 0 0 0); }
+.tx-waves { position: absolute; left: -100px; right: -100px; top: 0; height: 26px; z-index: 1;
+  background: radial-gradient(30px 13px at 30px 100%, var(--sea-light) 98%, transparent 100%) 0 0 / 60px 26px repeat-x;
+  transform: translate(calc(var(--t) * 120px), calc(100vh - var(--t) * 115vh - 25px)); }
+.tx-yacht .vehicle { width: clamp(260px, 38vw, 560px); aspect-ratio: 260 / 130; height: auto; transform: translate(calc(var(--t) * 95vw - 25vw), calc(100vh - var(--t) * 115vh - 92%)) rotate(calc(sin(var(--t) * 14rad) * 3deg)); }
+
+/* ---------- COMMENT ---------- */
+.how { padding: 90px 0 110px; background: var(--ivory); }
 .how h2, .try h2, .stay h2 { font-size: clamp(34px, 5.5vw, 56px); margin: 0 0 40px; line-height: 1.08; color: var(--night); }
 .steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 22px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
 .steps li { background: var(--ivory-2); border: 1px solid var(--line); border-radius: 22px; padding: 28px 26px; box-shadow: 0 20px 40px -30px rgba(11, 20, 38, .35); }
 .steps .num { font-family: var(--serif); font-size: 34px; color: var(--gold); }
 .steps h3 { font-size: 26px; margin: 6px 0 8px; color: var(--night); }
 .steps p { margin: 0; color: var(--muted); }
-.rail { position: absolute; left: 0; right: 0; bottom: 40px; height: 90px; }
-.track { position: absolute; left: 0; right: 0; bottom: 6px; height: 10px; border-top: 2px solid var(--gold); background: repeating-linear-gradient(90deg, var(--gold-deep) 0 3px, transparent 3px 26px); opacity: .7; }
-.train { width: clamp(380px, 60vw, 720px); height: clamp(42px, 6.6vw, 80px); bottom: 14px; left: 0; transform: translateX(calc(100vw - var(--p) * (100vw + 80vw))); }
 
-/* ---------- ATOUTS (hélicoptère) ---------- */
-.perks { background: linear-gradient(180deg, var(--night) 0%, var(--night-2) 100%); color: var(--ivory); padding: 150px 0 120px; }
+/* ---------- ATOUTS ---------- */
+.perks { background: var(--night); color: var(--ivory); padding: 90px 0 110px; }
 .perks h2 { font-size: clamp(34px, 5.5vw, 56px); line-height: 1.08; margin: 0 0 44px; }
 .perk-grid { display: grid; gap: 22px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
-.perk { border: 1px solid var(--line); border-radius: 22px; padding: 28px; background: rgba(255, 253, 247, .03); backdrop-filter: blur(2px); }
+.perk { border: 1px solid var(--line); border-radius: 22px; padding: 28px; background: rgba(255, 253, 247, .03); }
 .perk-icon { font-size: 30px; color: var(--gold); }
 .perk h3 { font-size: 26px; margin: 8px 0; color: var(--gold-light); }
 .perk p { margin: 0; color: var(--muted-light); }
-.heli { width: clamp(140px, 18vw, 200px); height: clamp(74px, 9.5vw, 106px); left: 0; top: 30px; transform: translate(calc(-25vw + var(--p) * 125vw), calc(sin(var(--p) * 6.28rad) * 30px)) rotate(-4deg); }
-.rotor { transform-box: fill-box; transform-origin: center; animation: rotor .18s linear infinite; }
-@keyframes rotor { 0%, 100% { transform: scaleX(1); } 50% { transform: scaleX(.12); } }
-.tail-rotor { transform-box: fill-box; transform-origin: center; animation: spin .3s linear infinite; stroke-dasharray: 10 6; }
-@keyframes spin { to { transform: rotate(360deg); } }
 
 /* ---------- CHAT ---------- */
-.try { padding: 120px 0 110px; background: radial-gradient(80% 60% at 50% 0%, #fffaf0, var(--ivory)); }
+.try { padding: 90px 0 110px; background: var(--ivory); }
 .try .wrap { text-align: center; }
 .chat-card { text-align: left; max-width: 720px; margin: 0 auto; background: var(--ivory-2); border: 1px solid var(--line); border-radius: 28px; overflow: hidden; display: flex; flex-direction: column; height: min(660px, 78vh); box-shadow: 0 40px 80px -40px rgba(11, 20, 38, .45); }
 .chat-head { display: flex; align-items: center; justify-content: space-between; padding: 14px 20px; background: var(--night); color: var(--ivory); }
@@ -163,40 +202,19 @@ h1 em, h2 em { font-style: italic; font-weight: 500; color: var(--gold); }
 .composer textarea:focus { outline: 2px solid var(--gold); outline-offset: 1px; }
 .send { padding: 0 20px; }
 
-/* ---------- VILLE (tram + bus) ---------- */
-.city { background: linear-gradient(180deg, var(--night-2), var(--night)); color: var(--ivory); padding: 120px 0 230px; }
+/* ---------- INSPIRATIONS ---------- */
+.city { background: var(--night); color: var(--ivory); padding: 90px 0 120px; }
 .city h2 { font-size: clamp(34px, 5.5vw, 56px); margin: 0 0 30px; }
 .dest { display: flex; flex-wrap: wrap; gap: 10px; }
 .dest button { background: transparent; color: var(--ivory); border-color: var(--line); font-size: 15px; padding: 10px 18px; }
 .dest button:hover { background: rgba(201, 163, 91, .14); }
-.street { position: absolute; left: 0; right: 0; bottom: 0; height: 200px; }
-.skyline { position: absolute; left: 0; right: 0; bottom: 34px; height: 150px; opacity: .35;
-  background:
-    linear-gradient(var(--gold-deep), var(--gold-deep)) 4% 100% / 5% 60% no-repeat,
-    linear-gradient(var(--gold-deep), var(--gold-deep)) 10% 100% / 4% 85% no-repeat,
-    linear-gradient(var(--gold-deep), var(--gold-deep)) 17% 100% / 6% 45% no-repeat,
-    linear-gradient(var(--gold-deep), var(--gold-deep)) 27% 100% / 3% 100% no-repeat,
-    linear-gradient(var(--gold-deep), var(--gold-deep)) 33% 100% / 7% 55% no-repeat,
-    linear-gradient(var(--gold-deep), var(--gold-deep)) 45% 100% / 4% 75% no-repeat,
-    linear-gradient(var(--gold-deep), var(--gold-deep)) 53% 100% / 6% 40% no-repeat,
-    linear-gradient(var(--gold-deep), var(--gold-deep)) 63% 100% / 3% 90% no-repeat,
-    linear-gradient(var(--gold-deep), var(--gold-deep)) 70% 100% / 8% 50% no-repeat,
-    linear-gradient(var(--gold-deep), var(--gold-deep)) 82% 100% / 4% 70% no-repeat,
-    linear-gradient(var(--gold-deep), var(--gold-deep)) 90% 100% / 6% 58% no-repeat; }
-.road { position: absolute; left: 0; right: 0; bottom: 0; height: 36px; background: #070d1a; border-top: 2px solid var(--gold);
-  background-image: repeating-linear-gradient(90deg, var(--gold-light) 0 28px, transparent 28px 64px); background-size: 100% 2px; background-position: 0 18px; background-repeat: repeat-x; }
-.tram { width: clamp(150px, 19vw, 210px); height: clamp(66px, 8.3vw, 92px); bottom: 50px; opacity: .85; left: 0; transform: translateX(calc(-30vw + var(--p) * 140vw)); }
-.bus { width: clamp(170px, 22vw, 240px); height: clamp(78px, 10vw, 110px); bottom: 22px; z-index: 1; left: 0; transform: translateX(calc(110vw - var(--p) * 140vw)); }
 
-/* ---------- SÉJOUR (villa + montgolfières) ---------- */
-.stay { padding: 130px 0 120px; background: linear-gradient(180deg, #fbe9d7 0%, var(--ivory) 70%); }
+/* ---------- SÉJOUR ---------- */
+.stay { padding: 90px 0 110px; background: linear-gradient(180deg, var(--dawn) 0%, var(--ivory) 80%); }
 .stay-grid { display: grid; gap: 40px; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); align-items: center; }
 .villa { width: 100%; max-width: 460px; height: auto; aspect-ratio: 320 / 170; justify-self: center; filter: drop-shadow(0 30px 30px rgba(11, 20, 38, .2)); }
 .villa .glow rect { animation: glow 3s ease-in-out infinite alternate; }
 @keyframes glow { from { opacity: .55; } to { opacity: 1; } }
-.balloon { width: clamp(56px, 7vw, 90px); height: clamp(88px, 11vw, 140px); }
-.balloon.b1 { right: 8%; top: 0; transform: translateY(calc(380px - var(--p) * 460px)); }
-.balloon.b2 { right: 24%; top: 0; width: clamp(38px, 4.5vw, 58px); height: clamp(60px, 7vw, 90px); opacity: .8; transform: translateY(calc(520px - var(--p) * 520px)); }
 
 /* ---------- EXTENSION ---------- */
 .ext { background: var(--ivory); padding: 40px 0 110px; }
@@ -204,14 +222,8 @@ h1 em, h2 em { font-style: italic; font-weight: 500; color: var(--gold); }
 .ext-card h2 { font-size: clamp(30px, 4.5vw, 46px); margin: 0 0 8px; }
 .ext-card .lead { margin: 0; }
 
-/* ---------- MER (yacht) ---------- */
-.sea { background: linear-gradient(180deg, var(--ivory) 0%, #cfe6ea 30%, var(--sea) 100%); padding: 160px 16px 36px; color: var(--ivory); text-align: center; }
-.waves { position: absolute; left: -10%; right: -10%; bottom: 120px; height: 60px; opacity: .55;
-  background: radial-gradient(40px 14px at 40px 100%, transparent 98%, var(--ivory-2) 100%) 0 0 / 80px 30px repeat-x;
-  animation: waves 8s linear infinite; }
-@keyframes waves { to { transform: translateX(80px); } }
-.yacht { width: clamp(170px, 22vw, 260px); height: clamp(85px, 11vw, 130px); left: 0; top: 40px; transform: translateX(calc(-30vw + var(--p) * 120vw)) rotate(calc(sin(var(--p) * 25rad) * 2deg)); }
-.foot { position: relative; z-index: 2; }
+/* ---------- PIED DE PAGE (la mer) ---------- */
+.sea { background: linear-gradient(180deg, var(--sea), #143f4e); color: var(--ivory); text-align: center; padding: 60px 16px 40px; }
 .foot p { margin: 6px 0; }
 .foot .brand { justify-content: center; }
 .foot a { color: var(--gold-light); }
@@ -224,11 +236,12 @@ h1 em, h2 em { font-style: italic; font-weight: 500; color: var(--gold); }
   .nav { padding: 12px 16px; }
   .nav nav a:not(.nav-cta) { display: none; }
   .ext-card { padding: 28px 22px; }
-  .how { padding-bottom: 150px; }
-  .balloon { opacity: .45; }
+  .tx { height: 200vh; }
+  .tx-caption { top: 14%; }
 }
 
 @media (prefers-reduced-motion: reduce) {
   * { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
   .reveal { opacity: 1; transform: none; }
+  .tx { display: none; }
 }
