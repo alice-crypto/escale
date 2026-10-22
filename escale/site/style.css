@@ -189,13 +189,28 @@ h2 { font-size: clamp(32px, 5.2vw, 56px); line-height: 1.08; margin: 0 0 32px; }
 .v svg { display: block; width: 100%; height: 100%; }
 .v.flip svg { transform: scaleX(-1); }
 .v-plane { width: clamp(300px, 58vw, 900px); aspect-ratio: 3 / 1; }
-.v-train { width: max(150vw, 900px); aspect-ratio: 640 / 70; top: auto; bottom: 16vh; }
-.v-train svg { transform: scaleX(-1); }      /* la locomotive regarde vers la gauche */
-.v-train.flip svg { transform: none; }
-.v-rail { left: 0; right: 0; top: auto; bottom: calc(16vh - 12px); height: 12px; border-top: 2px solid var(--gold); background: repeating-linear-gradient(90deg, var(--gold-deep) 0 3px, transparent 3px 24px); filter: none; }
-.v-heli { width: clamp(220px, 34vw, 460px); aspect-ratio: 170 / 90; }
-.v-bus { width: clamp(230px, 38vw, 540px); aspect-ratio: 240 / 110; top: auto; bottom: 4vh; }
-.v-tram { width: clamp(170px, 26vw, 360px); aspect-ratio: 230 / 100; top: auto; bottom: 12vh; opacity: .92; }
+/* Le vin */
+.v-bottle { --bw: min(40vw, 340px); width: var(--bw); aspect-ratio: 230 / 126; left: calc(50vw - var(--bw) * 0.183); top: calc(30vh - var(--bw) * 0.466); }
+.v-stream { left: calc(50vw - 4px); top: 30vh; width: 8px; height: 36vh; border-radius: 4px; transform-origin: top; filter: none;
+  background: linear-gradient(90deg, #4a0f1d, #9b2a40 45%, #4a0f1d); }
+.v-glass { height: 30vh; aspect-ratio: 100 / 200; top: auto; bottom: 5vh; left: calc(50vw - 7.5vh); }
+.v-glass .wine-fill { transform-box: fill-box; transform-origin: bottom; }
+.v-winewave { left: -100px; right: -100px; height: 64px; filter: none;
+  background:
+    radial-gradient(28px 12px at 28px 100%, #6d1a2c 98%, transparent 100%) 0 0 / 56px 24px repeat-x,
+    linear-gradient(#6d1a2c, rgba(109, 26, 44, 0)) 0 24px / 100% 40px no-repeat; }
+
+/* Le dîner */
+.v-plate { width: clamp(240px, 38vw, 540px); aspect-ratio: 260 / 150; }
+.v-plate.fruit { top: 14vh; }
+.v-plate.steak { top: auto; bottom: 8vh; }
+
+/* La plage */
+.v-surf { left: -5vw; right: -5vw; width: auto; height: 42vh; filter: none;
+  background:
+    radial-gradient(34px 14px at 34px 100%, #ffffff 96%, transparent 100%) 0 0 / 68px 28px repeat-x,
+    linear-gradient(180deg, transparent 0 27px, rgba(255, 255, 255, .95) 27px 40px, rgba(80, 205, 212, .9) 40px, rgba(40, 160, 178, .55) 55%, rgba(40, 160, 178, 0) 100%); }
+.v-starfish { width: clamp(56px, 9vh, 96px); aspect-ratio: 1; }
 .v-balloon { height: clamp(140px, 30vh, 300px); aspect-ratio: 90 / 140; }
 .v-balloon.b2 { height: clamp(90px, 18vh, 190px); }
 .v-balloon.b3 { height: clamp(120px, 24vh, 250px); }

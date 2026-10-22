@@ -23,6 +23,12 @@
     ttb: () => steps(-2, 114, (y) => `polygon(0% 0%, 100% 0%, 100% ${y}%, 0% ${y - 12}%)`),
     btt: () => steps(112, -12, (y) => `polygon(0% ${y}%, 100% ${y - 10}%, 100% 100%, 0% 100%)`),
     sea: () => steps(103, -3, (y) => `polygon(0% ${y}%, 100% ${y}%, 100% 100%, 0% 100%)`),
+    // le vin : on attend que le verre se remplisse, puis le vin monte sur tout l'écran
+    wine: () => {
+      const flat = (y) => `polygon(0% ${y}%, 100% ${y}%, 100% 100%, 0% 100%)`;
+      const rise = steps(103, -3, flat, 10).map((f, k) => ({ ...f, offset: 0.35 + (0.65 * k) / 10 }));
+      return [{ clipPath: flat(103), offset: 0 }, ...rise];
+    },
   };
 
   // ---- Chaque transition : une forme de dévoilement + des engins et leurs trajectoires ----
@@ -37,31 +43,57 @@
         ]],
       ],
     },
-    train: {
-      wipe: "rtl",
-      horizontal: true,
+    wine: {
+      wipe: "wine",
+      horizontal: false,
       vehicles: [
-        [".v-rail", [{ opacity: 0 }, { opacity: 1, offset: 0.15 }, { opacity: 1, offset: 0.85 }, { opacity: 0 }]],
-        [".v-train", [{ transform: "translateX(100vw)" }, { transform: "translateX(calc(-100% - 10vw))" }]],
-      ],
-    },
-    heli: {
-      wipe: "ttb",
-      horizontal: true,
-      vehicles: [
-        [".v-heli", [
-          { transform: "translate(72vw, -40vh) rotate(-4deg)" },
-          { transform: "translate(40vw, 30vh) rotate(4deg)", offset: 0.5 },
-          { transform: "translate(6vw, 108vh) rotate(-4deg)" },
+        [".v-winewave", [
+          { transform: "translate(0, calc(103vh - 24px))", offset: 0 },
+          { transform: "translate(0, calc(103vh - 24px))", offset: 0.35 },
+          { transform: "translate(100px, calc(-3vh - 24px))", offset: 1 },
+        ]],
+        [".v-glass", [
+          { transform: "translateY(40vh)", opacity: 0, offset: 0 },
+          { transform: "translateY(0)", opacity: 1, offset: 0.12 },
+          { transform: "translateY(0)", opacity: 1, offset: 0.82 },
+          { transform: "translateY(0)", opacity: 0, offset: 1 },
+        ]],
+        [".v-glass .wine-fill", [
+          { transform: "scaleY(0)", offset: 0 },
+          { transform: "scaleY(0)", offset: 0.18 },
+          { transform: "scaleY(.9)", offset: 0.42 },
+          { transform: "scaleY(.9)", offset: 1 },
+        ]],
+        [".v-stream", [
+          { transform: "scaleY(0)", opacity: 1, offset: 0 },
+          { transform: "scaleY(0)", opacity: 1, offset: 0.13 },
+          { transform: "scaleY(1)", opacity: 1, offset: 0.22 },
+          { transform: "scaleY(1)", opacity: 1, offset: 0.66 },
+          { transform: "scaleY(1)", opacity: 0, offset: 0.74 },
+          { transform: "scaleY(1)", opacity: 0, offset: 1 },
+        ]],
+        [".v-bottle", [
+          { transform: "translate(30vw, -45vh) rotate(25deg)", opacity: 0, offset: 0 },
+          { transform: "translate(0, 0) rotate(0deg)", opacity: 1, offset: 0.13 },
+          { transform: "translate(0, 0) rotate(0deg)", opacity: 1, offset: 0.7 },
+          { transform: "translate(28vw, -50vh) rotate(30deg)", opacity: 0, offset: 1 },
         ]],
       ],
     },
-    city: {
+    dinner: {
       wipe: "ltr",
       horizontal: true,
       vehicles: [
-        [".v-tram", [{ transform: "translateX(108vw)" }, { transform: "translateX(-40vw)" }]],
-        [".v-bus", [{ transform: "translateX(-46vw)" }, { transform: "translateX(112vw)" }]],
+        [".v-plate.fruit", [{ transform: "translateX(105vw) rotate(5deg)" }, { transform: "translateX(-46vw) rotate(-5deg)" }]],
+        [".v-plate.steak", [{ transform: "translateX(-46vw) rotate(-5deg)" }, { transform: "translateX(110vw) rotate(5deg)" }]],
+      ],
+    },
+    beach: {
+      wipe: "sea",
+      horizontal: false,
+      vehicles: [
+        [".v-surf", [{ transform: "translate(0, calc(103vh - 26px))" }, { transform: "translate(-68px, calc(-3vh - 26px))" }]],
+        [".v-starfish", [{ transform: "translate(18vw, calc(103vh - 50px)) rotate(0deg)" }, { transform: "translate(72vw, calc(-3vh - 50px)) rotate(220deg)" }]],
       ],
     },
     balloon: {
