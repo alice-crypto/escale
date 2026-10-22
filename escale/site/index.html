@@ -151,6 +151,15 @@
       <g fill="#fbd3b8"><circle cx="50" cy="30" r="2.5"/><circle cx="50" cy="44" r="2.5"/><circle cx="66" cy="44" r="2.5"/><circle cx="34" cy="44" r="2.5"/><circle cx="60" cy="62" r="2.5"/><circle cx="40" cy="62" r="2.5"/></g>
     </symbol>
 
+    <!-- Cloche de service dorée -->
+    <symbol id="i-cloche" viewBox="0 0 200 130">
+      <defs><linearGradient id="clocheGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fbeec6"/><stop offset=".45" stop-color="#d9b56c"/><stop offset="1" stop-color="#8f6a2e"/></linearGradient></defs>
+      <path d="M12 118 C12 58 52 26 100 26 C148 26 188 58 188 118 Z" fill="url(#clocheGrad)" stroke="#8f6a2e" stroke-width="1.5"/>
+      <path d="M40 104 C44 70 66 48 96 42" fill="none" stroke="#fffbea" stroke-width="5" opacity=".55" stroke-linecap="round"/>
+      <rect x="4" y="116" width="192" height="8" rx="4" fill="#c9a35b" stroke="#8f6a2e"/>
+      <circle cx="100" cy="20" r="9" fill="url(#clocheGrad)" stroke="#8f6a2e" stroke-width="1.5"/>
+      <rect x="96" y="24" width="8" height="6" fill="#c9a35b"/>
+    </symbol>
     <symbol id="i-villa" viewBox="0 0 320 170">
       <rect x="20" y="70" width="190" height="80" fill="url(#ivory)" stroke="#c9a35b" stroke-width="1.4"/>
       <path d="M10 72 L115 18 L220 72 Z" fill="#0f1d36" stroke="#c9a35b" stroke-width="1.4"/>
@@ -309,27 +318,37 @@
   <div class="tx-overlay" aria-hidden="true">
     <div class="v v-plane"><svg><use href="#i-plane"/></svg></div>
 
-    <!-- Le vin : la bouteille verse, le verre se remplit, puis le vin monte sur tout l'écran -->
-    <div class="v v-winewave"></div>
+    <!-- Le vin : la bouteille verse, le verre se remplit, une goutte tombe, les ondes s'élargissent -->
+    <div class="v v-ripple r3"></div>
+    <div class="v v-ripple r2"></div>
+    <div class="v v-ripple r1"></div>
     <div class="v v-stream"></div>
+    <div class="v v-drop"></div>
     <div class="v v-bottle"><svg><use href="#i-bottle"/></svg></div>
     <div class="v v-glass">
       <svg viewBox="0 0 100 200">
-        <defs><clipPath id="bowl"><path d="M14 8 C14 70 30 96 50 96 C70 96 86 70 86 8 Z"/></clipPath></defs>
-        <g clip-path="url(#bowl)"><rect class="wine-fill" x="0" y="8" width="100" height="90" fill="#6d1a2c"/></g>
-        <path d="M14 8 C14 70 30 96 50 96 C70 96 86 70 86 8" fill="rgba(255,255,255,.14)" stroke="#c9a35b" stroke-width="2"/>
-        <path d="M24 16 C24 56 32 78 42 86" fill="none" stroke="#fff" stroke-width="3" opacity=".35" stroke-linecap="round"/>
-        <path d="M48 96 L48 178 M52 96 L52 178" stroke="#c9a35b" stroke-width="2"/>
-        <ellipse cx="50" cy="182" rx="30" ry="7" fill="rgba(255,255,255,.14)" stroke="#c9a35b" stroke-width="2"/>
+        <defs>
+          <clipPath id="bowl"><path d="M14 8 C14 70 30 96 50 96 C70 96 86 70 86 8 Z"/></clipPath>
+          <linearGradient id="wineGrad" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#4a0f1d"/><stop offset=".45" stop-color="#8e2338"/><stop offset="1" stop-color="#4a0f1d"/></linearGradient>
+        </defs>
+        <g clip-path="url(#bowl)"><rect class="wine-fill" x="0" y="8" width="100" height="90" fill="url(#wineGrad)"/></g>
+        <path d="M14 8 C14 70 30 96 50 96 C70 96 86 70 86 8" fill="rgba(255,255,255,.12)" stroke="#e8cf94" stroke-width="1.6"/>
+        <ellipse cx="50" cy="8" rx="36" ry="3" fill="none" stroke="#e8cf94" stroke-width="1.4"/>
+        <path d="M23 16 C23 54 31 76 41 86" fill="none" stroke="#fff" stroke-width="2.5" opacity=".4" stroke-linecap="round"/>
+        <path d="M49 96 L49 178 M51 96 L51 178" stroke="#e8cf94" stroke-width="1.6"/>
+        <ellipse cx="50" cy="181" rx="28" ry="6" fill="rgba(255,255,255,.12)" stroke="#e8cf94" stroke-width="1.6"/>
       </svg>
     </div>
 
-    <!-- Le dîner : deux assiettes se croisent -->
+    <!-- Le dîner : l'assiette arrive sous une cloche dorée, la cloche se lève -->
+    <div class="v v-ring"></div>
+    <div class="v v-glow"></div>
     <div class="v v-plate fruit"><svg><use href="#i-plate-fruit"/></svg></div>
     <div class="v v-plate steak"><svg><use href="#i-plate-steak"/></svg></div>
+    <div class="v v-cloche"><svg><use href="#i-cloche"/></svg></div>
 
-    <!-- La plage : une vague turquoise et son écume -->
-    <div class="v v-surf"></div>
+    <!-- La plage : trois couches de vagues qui ondulent, avec l'écume -->
+    <div class="v v-surf"><div class="w w1"></div><div class="w w2"></div><div class="w w3"></div><div class="foam"></div></div>
     <div class="v v-starfish"><svg><use href="#i-starfish"/></svg></div>
 
     <div class="v v-balloon b1"><svg><use href="#i-balloon"/></svg></div>

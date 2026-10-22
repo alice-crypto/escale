@@ -23,11 +23,21 @@
     ttb: () => steps(-2, 114, (y) => `polygon(0% 0%, 100% 0%, 100% ${y}%, 0% ${y - 12}%)`),
     btt: () => steps(112, -12, (y) => `polygon(0% ${y}%, 100% ${y - 10}%, 100% 100%, 0% 100%)`),
     sea: () => steps(103, -3, (y) => `polygon(0% ${y}%, 100% ${y}%, 100% 100%, 0% 100%)`),
-    // le vin : on attend que le verre se remplisse, puis le vin monte sur tout l'écran
-    wine: () => {
+    // Cercle qui s'ouvre depuis un point (le verre, l'assiette), après un temps d'attente
+    circle: (at, startAt) => [
+      { clipPath: `circle(0vmax at ${at})`, offset: 0 },
+      { clipPath: `circle(0vmax at ${at})`, offset: startAt, easing: "cubic-bezier(.55, 0, .25, 1)" },
+      { clipPath: `circle(150vmax at ${at})`, offset: 1 },
+    ],
+    // La mer : elle monte, recule un peu (ressac), puis recouvre tout
+    surf: () => {
       const flat = (y) => `polygon(0% ${y}%, 100% ${y}%, 100% 100%, 0% 100%)`;
-      const rise = steps(103, -3, flat, 10).map((f, k) => ({ ...f, offset: 0.35 + (0.65 * k) / 10 }));
-      return [{ clipPath: flat(103), offset: 0 }, ...rise];
+      return [
+        { clipPath: flat(104), offset: 0, easing: "cubic-bezier(.3, 0, .3, 1)" },
+        { clipPath: flat(40), offset: 0.42, easing: "ease-in-out" },
+        { clipPath: flat(54), offset: 0.6, easing: "cubic-bezier(.5, 0, .3, 1)" },
+        { clipPath: flat(-12), offset: 1 },
+      ];
     },
   };
 
@@ -44,56 +54,128 @@
       ],
     },
     wine: {
-      wipe: "wine",
+      // Le vin : la bouteille arrive, verse lentement, une goutte tombe, des ondes s'élargissent
+      duration: 3200,
+      easing: "linear",
+      wipe: () => wipes.circle("50% 72%", 0.6),
       horizontal: false,
       vehicles: [
-        [".v-winewave", [
-          { transform: "translate(0, calc(103vh - 24px))", offset: 0 },
-          { transform: "translate(0, calc(103vh - 24px))", offset: 0.35 },
-          { transform: "translate(100px, calc(-3vh - 24px))", offset: 1 },
+        [".v-bottle", [
+          { transform: "translate(26vw, -46vh) rotate(24deg)", opacity: 0, offset: 0, easing: "cubic-bezier(.2, .7, .3, 1)" },
+          { transform: "translate(0, 0) rotate(0deg)", opacity: 1, offset: 0.18 },
+          { transform: "translate(0, 0) rotate(0deg)", opacity: 1, offset: 0.5, easing: "cubic-bezier(.5, 0, .7, .4)" },
+          { transform: "translate(22vw, -50vh) rotate(-10deg)", opacity: 0, offset: 0.68 },
+          { transform: "translate(22vw, -50vh) rotate(-10deg)", opacity: 0, offset: 1 },
+        ]],
+        [".v-stream", [
+          { clipPath: "inset(0 0 100% 0)", offset: 0 },
+          { clipPath: "inset(0 0 100% 0)", offset: 0.17, easing: "ease-in" },
+          { clipPath: "inset(0 0 0% 0)", offset: 0.24 },
+          { clipPath: "inset(0 0 0% 0)", offset: 0.47, easing: "ease-in" },
+          { clipPath: "inset(100% 0 0 0)", offset: 0.53 },
+          { clipPath: "inset(100% 0 0 0)", offset: 1 },
+        ]],
+        [".v-drop", [
+          { transform: "translateY(0) scale(0)", opacity: 0, offset: 0 },
+          { transform: "translateY(0) scale(0)", opacity: 0, offset: 0.52 },
+          { transform: "translateY(0) scale(1)", opacity: 1, offset: 0.54, easing: "cubic-bezier(.55, 0, 1, .45)" },
+          { transform: "translateY(40vh) scale(1)", opacity: 1, offset: 0.6 },
+          { transform: "translateY(40vh) scale(0)", opacity: 0, offset: 0.61 },
+          { transform: "translateY(40vh) scale(0)", opacity: 0, offset: 1 },
         ]],
         [".v-glass", [
-          { transform: "translateY(40vh)", opacity: 0, offset: 0 },
-          { transform: "translateY(0)", opacity: 1, offset: 0.12 },
-          { transform: "translateY(0)", opacity: 1, offset: 0.82 },
-          { transform: "translateY(0)", opacity: 0, offset: 1 },
+          { transform: "translateY(18vh)", opacity: 0, offset: 0, easing: "cubic-bezier(.2, .7, .3, 1)" },
+          { transform: "translateY(0)", opacity: 1, offset: 0.14 },
+          { transform: "translateY(0) scale(1)", opacity: 1, offset: 0.78, easing: "ease-in" },
+          { transform: "translateY(2vh) scale(.94)", opacity: 0, offset: 0.95 },
+          { transform: "translateY(2vh) scale(.94)", opacity: 0, offset: 1 },
         ]],
         [".v-glass .wine-fill", [
           { transform: "scaleY(0)", offset: 0 },
-          { transform: "scaleY(0)", offset: 0.18 },
-          { transform: "scaleY(.9)", offset: 0.42 },
-          { transform: "scaleY(.9)", offset: 1 },
+          { transform: "scaleY(0)", offset: 0.22, easing: "cubic-bezier(.3, 0, .4, 1)" },
+          { transform: "scaleY(.62)", offset: 0.5 },
+          { transform: "scaleY(.62)", offset: 1 },
         ]],
-        [".v-stream", [
-          { transform: "scaleY(0)", opacity: 1, offset: 0 },
-          { transform: "scaleY(0)", opacity: 1, offset: 0.13 },
-          { transform: "scaleY(1)", opacity: 1, offset: 0.22 },
-          { transform: "scaleY(1)", opacity: 1, offset: 0.66 },
-          { transform: "scaleY(1)", opacity: 0, offset: 0.74 },
-          { transform: "scaleY(1)", opacity: 0, offset: 1 },
+        [".v-ripple.r1", [
+          { width: "0vmax", height: "0vmax", opacity: 1, offset: 0 },
+          { width: "0vmax", height: "0vmax", opacity: 1, offset: 0.6, easing: "cubic-bezier(.55, 0, .25, 1)" },
+          { width: "300vmax", height: "300vmax", opacity: 1, offset: 1 },
         ]],
-        [".v-bottle", [
-          { transform: "translate(30vw, -45vh) rotate(25deg)", opacity: 0, offset: 0 },
-          { transform: "translate(0, 0) rotate(0deg)", opacity: 1, offset: 0.13 },
-          { transform: "translate(0, 0) rotate(0deg)", opacity: 1, offset: 0.7 },
-          { transform: "translate(28vw, -50vh) rotate(30deg)", opacity: 0, offset: 1 },
+        [".v-ripple.r2", [
+          { width: "0vmax", height: "0vmax", opacity: 1, offset: 0 },
+          { width: "0vmax", height: "0vmax", opacity: 1, offset: 0.66, easing: "cubic-bezier(.4, 0, .3, 1)" },
+          { width: "160vmax", height: "160vmax", opacity: 0, offset: 1 },
+        ]],
+        [".v-ripple.r3", [
+          { width: "0vmax", height: "0vmax", opacity: 1, offset: 0 },
+          { width: "0vmax", height: "0vmax", opacity: 1, offset: 0.72, easing: "cubic-bezier(.4, 0, .3, 1)" },
+          { width: "90vmax", height: "90vmax", opacity: 0, offset: 1 },
         ]],
       ],
     },
     dinner: {
-      wipe: "ltr",
-      horizontal: true,
+      // Le dîner : l'assiette glisse sous sa cloche, la cloche se lève dans un halo, la page s'ouvre
+      duration: 3000,
+      easing: "linear",
+      wipe: () => wipes.circle("50% 60%", 0.46),
+      horizontal: false,
       vehicles: [
-        [".v-plate.fruit", [{ transform: "translateX(105vw) rotate(5deg)" }, { transform: "translateX(-46vw) rotate(-5deg)" }]],
-        [".v-plate.steak", [{ transform: "translateX(-46vw) rotate(-5deg)" }, { transform: "translateX(110vw) rotate(5deg)" }]],
+        [".v-plate.fruit", [
+          { transform: "translateX(60vw) rotate(4deg)", opacity: 0, offset: 0 },
+          { transform: "translateX(60vw) rotate(4deg)", opacity: 0, offset: 0.06, easing: "cubic-bezier(.2, .7, .3, 1)" },
+          { transform: "translateX(0) rotate(0deg)", opacity: 1, offset: 0.34 },
+          { transform: "translateX(0) rotate(0deg)", opacity: 1, offset: 0.7, easing: "ease-in" },
+          { transform: "translateX(0) scale(.92)", opacity: 0, offset: 0.86 },
+          { transform: "translateX(0) scale(.92)", opacity: 0, offset: 1 },
+        ]],
+        [".v-plate.steak", [
+          { transform: "translateX(-80vw) rotate(-3deg)", offset: 0, easing: "cubic-bezier(.2, .7, .3, 1)" },
+          { transform: "translateX(0) rotate(0deg)", opacity: 1, offset: 0.32 },
+          { transform: "translateX(0) scale(1)", opacity: 1, offset: 0.76, easing: "ease-in" },
+          { transform: "translateX(0) scale(.94)", opacity: 0, offset: 0.92 },
+          { transform: "translateX(0) scale(.94)", opacity: 0, offset: 1 },
+        ]],
+        [".v-cloche", [
+          { transform: "translate(-80vw, 0) rotate(-3deg)", opacity: 1, offset: 0, easing: "cubic-bezier(.2, .7, .3, 1)" },
+          { transform: "translate(0, 0) rotate(0deg)", opacity: 1, offset: 0.32 },
+          { transform: "translate(0, -1.5vh) rotate(0deg)", opacity: 1, offset: 0.38, easing: "ease-out" },
+          { transform: "translate(0, 0) rotate(0deg)", opacity: 1, offset: 0.4, easing: "cubic-bezier(.5, 0, .6, 1)" },
+          { transform: "translate(6vw, -52vh) rotate(10deg)", opacity: 0, offset: 0.62 },
+          { transform: "translate(6vw, -52vh) rotate(10deg)", opacity: 0, offset: 1 },
+        ]],
+        [".v-glow", [
+          { transform: "scale(.2)", opacity: 0, offset: 0 },
+          { transform: "scale(.2)", opacity: 0, offset: 0.4, easing: "ease-out" },
+          { transform: "scale(1)", opacity: 1, offset: 0.52, easing: "ease-in" },
+          { transform: "scale(1.6)", opacity: 0, offset: 0.8 },
+          { transform: "scale(1.6)", opacity: 0, offset: 1 },
+        ]],
+        [".v-ring", [
+          { width: "0vmax", height: "0vmax", opacity: 1, offset: 0 },
+          { width: "0vmax", height: "0vmax", opacity: 1, offset: 0.46, easing: "cubic-bezier(.55, 0, .25, 1)" },
+          { width: "300vmax", height: "300vmax", opacity: 1, offset: 1 },
+        ]],
       ],
     },
     beach: {
-      wipe: "sea",
+      // La plage : la mer monte, reflue un peu, puis recouvre l'écran
+      duration: 3000,
+      easing: "linear",
+      wipe: () => wipes.surf(),
       horizontal: false,
       vehicles: [
-        [".v-surf", [{ transform: "translate(0, calc(103vh - 26px))" }, { transform: "translate(-68px, calc(-3vh - 26px))" }]],
-        [".v-starfish", [{ transform: "translate(18vw, calc(103vh - 50px)) rotate(0deg)" }, { transform: "translate(72vw, calc(-3vh - 50px)) rotate(220deg)" }]],
+        [".v-surf", [
+          { transform: "translateY(calc(104vh - 34px))", offset: 0, easing: "cubic-bezier(.3, 0, .3, 1)" },
+          { transform: "translateY(calc(40vh - 34px))", offset: 0.42, easing: "ease-in-out" },
+          { transform: "translateY(calc(54vh - 34px))", offset: 0.6, easing: "cubic-bezier(.5, 0, .3, 1)" },
+          { transform: "translateY(calc(-12vh - 34px))", offset: 1 },
+        ]],
+        [".v-starfish", [
+          { transform: "translate(16vw, calc(104vh - 60px)) rotate(0deg)", offset: 0, easing: "cubic-bezier(.3, 0, .3, 1)" },
+          { transform: "translate(34vw, calc(40vh - 60px)) rotate(90deg)", offset: 0.42, easing: "ease-in-out" },
+          { transform: "translate(40vw, calc(54vh - 60px)) rotate(70deg)", offset: 0.6, easing: "cubic-bezier(.5, 0, .3, 1)" },
+          { transform: "translate(70vw, calc(-12vh - 60px)) rotate(260deg)", offset: 1 },
+        ]],
       ],
     },
     balloon: {
@@ -151,15 +233,21 @@
       return;
     }
 
-    const options = { duration: DURATION, easing: EASE, fill: "both", direction: forward ? "normal" : "reverse" };
+    const options = {
+      duration: tx.duration || DURATION,
+      easing: tx.easing || EASE,
+      fill: "both",
+      direction: forward ? "normal" : "reverse",
+    };
+    const wipeFrames = typeof tx.wipe === "function" ? tx.wipe() : wipes[tx.wipe]();
     const animations = [];
     if (forward) {
       next.classList.add("incoming");
-      animations.push(next.animate(wipes[tx.wipe](), options));
+      animations.push(next.animate(wipeFrames, options));
     } else {
       next.classList.add("under");
       current.classList.add("leaving");
-      animations.push(current.animate(wipes[tx.wipe](), options));
+      animations.push(current.animate(wipeFrames, options));
     }
     const shown = [];
     for (const [sel, frames] of tx.vehicles) {
