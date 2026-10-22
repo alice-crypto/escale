@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Escale – ton agent IA pour choisir où partir</title>
+  <meta name="description" content="Escale est un agent IA qui vérifie la météo réelle, lit les guides de voyage et t'aide à choisir ta destination de vacances.">
+  <meta property="og:title" content="Escale – ton agent IA pour choisir où partir">
+  <meta property="og:description" content="Dis-lui tes envies et ton budget : Escale vérifie la météo réelle et les guides de voyage, et te conseille.">
+  <meta property="og:image" content="icon.png">
+  <link rel="icon" href="favicon.png">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="nav">
+    <a class="brand" href="#"><img src="icon.png" alt="" width="32" height="32"> Escale</a>
+    <a class="nav-cta" href="#essayer">Essayer</a>
+  </header>
+
+  <main>
+    <section class="hero">
+      <h1>Tu hésites ?<br><span>Demande à Escale.</span></h1>
+      <p>Un agent IA qui vérifie la <strong>météo réelle</strong> de tes dates, lit les <strong>guides de voyage</strong> et te dit où partir, selon ton budget.</p>
+      <div class="hero-actions">
+        <a class="btn primary" href="#essayer">Essayer gratuitement</a>
+        <a class="btn ghost" href="#extension">Extension Chrome</a>
+      </div>
+      <p class="small">3 analyses offertes · sans inscription</p>
+    </section>
+
+    <section class="steps">
+      <h2>Comment ça marche</h2>
+      <ol>
+        <li><span class="num">1</span><div><strong>Dis tes envies</strong><p>« 7 jours au soleil en décembre, 500 000 FCFA à deux depuis Douala »</p></div></li>
+        <li><span class="num">2</span><div><strong>L'agent vérifie</strong><p>Météo réelle de la période, guides des destinations, budget.</p></div></li>
+        <li><span class="num">3</span><div><strong>Tu choisis</strong><p>Une recommandation claire, avec des alternatives et les pièges à éviter.</p></div></li>
+      </ol>
+    </section>
+
+    <section id="essayer" class="try">
+      <h2>Essaie maintenant</h2>
+      <div class="chat-card">
+        <div class="chat-head">
+          <div class="brand small-brand"><img src="icon.png" alt="" width="24" height="24"> Escale</div>
+          <span id="credits" class="credits">…</span>
+        </div>
+        <div id="chat" class="chat" aria-live="polite">
+          <div class="msg agent">Salut 👋 Dis-moi où tu pars, quand, avec qui et ton budget. Je m'occupe du reste.</div>
+          <div class="suggestions">
+            <button type="button" data-q="7 jours au soleil en décembre, 500 000 FCFA à deux depuis Douala. Où aller ?">☀️ Soleil en décembre depuis Douala</button>
+            <button type="button" data-q="Week-end en amoureux en février depuis Paris, budget 600 €. Des idées ?">💕 Week-end depuis Paris</button>
+            <button type="button" data-q="Lisbonne ou Marrakech pour 10 jours en mars ?">🤔 Lisbonne ou Marrakech ?</button>
+          </div>
+        </div>
+        <div id="paywall" class="paywall" hidden>
+          <strong>Tes analyses gratuites sont terminées.</strong>
+          <p>Les packs payants arrivent très bientôt.</p>
+        </div>
+        <form id="composer" class="composer">
+          <textarea id="input" rows="1" maxlength="2000" placeholder="Décris ton voyage idéal…" aria-label="Ton message"></textarea>
+          <button id="send" class="btn primary send" type="submit" aria-label="Envoyer">➤</button>
+        </form>
+      </div>
+      <p class="small center">Chaque nouvelle conversation utilise une analyse. Écris « nouveau » pour en commencer une autre.</p>
+    </section>
+
+    <section id="extension" class="channels">
+      <h2>Escale partout</h2>
+      <div class="cards">
+        <div class="card">
+          <div class="card-icon">🧩</div>
+          <h3>Extension Chrome</h3>
+          <p>Sur un hôtel, un Airbnb ou un blog voyage, clique sur « Analyser cette page » : Escale te dit si c'est un bon plan.</p>
+          <a id="chrome-link" class="btn ghost" href="#" aria-disabled="true">Bientôt sur le Chrome Web Store</a>
+        </div>
+        <div class="card">
+          <div class="card-icon">💬</div>
+          <h3>WhatsApp</h3>
+          <p>Écris à Escale comme à un ami, directement depuis ton téléphone.</p>
+          <a class="btn ghost" href="#" aria-disabled="true">Bientôt disponible</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>© 2026 Escale · <a href="https://escale-luv4.onrender.com/confidentialite">Confidentialité</a> · <a href="mailto:yalakouam@gmail.com">Contact</a></p>
+    <p class="small">Les conseils d'Escale sont indicatifs : vérifie les prix et conditions avant de réserver.</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

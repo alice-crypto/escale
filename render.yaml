@@ -21,3 +21,9 @@ services:
         sync: false
       - key: WHATSAPP_VERIFY_TOKEN
         generateValue: true
+
+  - type: web
+    name: escale-site
+    runtime: static
+    buildCommand: echo "Site statique, rien a construire"
+    staticPublishPath: ./escale/site
