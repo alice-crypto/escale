@@ -144,14 +144,11 @@
       <a class="scroll-hint" href="#comment" aria-label="Faire défiler"><span></span></a>
     </section>
 
-    <!-- TRANSITION AVION : il décolle et dévoile la page ivoire -->
-    <div class="tx tx-plane" data-tx aria-hidden="true">
-      <div class="tx-stage">
-        <div class="tx-layer from"><div class="stars"></div></div>
-        <div class="tx-layer to"></div>
-        <svg class="contrail-big" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M-5 78 C 30 72 62 56 105 26" pathLength="1"/></svg>
+    <div class="seam seam-plane" data-seam aria-hidden="true">
+      <div class="seam-stage">
+        <div class="seam-fill"></div>
+        <svg class="seam-trail" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M-5 70 C 30 66 62 50 105 22" pathLength="1"/></svg>
         <svg class="vehicle"><use href="#i-plane"/></svg>
-        <p class="tx-caption">Embarquement immédiat</p>
       </div>
     </div>
 
@@ -168,14 +165,11 @@
       </div>
     </section>
 
-    <!-- TRANSITION TRAIN : il traverse et amène la nuit -->
-    <div class="tx tx-train" data-tx aria-hidden="true">
-      <div class="tx-stage">
-        <div class="tx-layer from"></div>
-        <div class="tx-layer to"><div class="stars"></div></div>
-        <div class="tx-track"></div>
+    <div class="seam seam-train" data-seam aria-hidden="true">
+      <div class="seam-stage">
+        <div class="seam-fill"></div>
+        <div class="seam-rail"></div>
         <svg class="vehicle"><use href="#i-train"/></svg>
-        <p class="tx-caption">En voiture</p>
       </div>
     </div>
 
@@ -192,14 +186,10 @@
       </div>
     </section>
 
-    <!-- TRANSITION HÉLICOPTÈRE : il descend et déroule la page suivante -->
-    <div class="tx tx-heli" data-tx aria-hidden="true">
-      <div class="tx-stage">
-        <div class="tx-layer from"><div class="stars"></div></div>
-        <div class="tx-layer to"></div>
-        <div class="tx-edge"></div>
+    <div class="seam seam-heli" data-seam aria-hidden="true">
+      <div class="seam-stage">
+        <div class="seam-fill"></div>
         <svg class="vehicle"><use href="#i-heli"/></svg>
-        <p class="tx-caption">Atterrissage en douceur</p>
       </div>
     </div>
 
@@ -234,15 +224,12 @@
       </div>
     </section>
 
-    <!-- TRANSITION VILLE : le bus et le tram amènent la ville de nuit -->
-    <div class="tx tx-city" data-tx aria-hidden="true">
-      <div class="tx-stage">
-        <div class="tx-layer from"></div>
-        <div class="tx-layer to"><div class="skyline"></div></div>
-        <div class="tx-road"></div>
+    <div class="seam seam-city" data-seam aria-hidden="true">
+      <div class="seam-stage">
+        <div class="seam-fill"><div class="skyline"></div></div>
+        <div class="seam-road"></div>
         <svg class="vehicle tram"><use href="#i-tram"/></svg>
         <svg class="vehicle bus"><use href="#i-bus"/></svg>
-        <p class="tx-caption">Cap sur la ville</p>
       </div>
     </div>
 
@@ -264,15 +251,12 @@
       </div>
     </section>
 
-    <!-- TRANSITION MONTGOLFIÈRES : elles s'élèvent et font lever le jour -->
-    <div class="tx tx-balloon" data-tx aria-hidden="true">
-      <div class="tx-stage">
-        <div class="tx-layer from"><div class="stars"></div></div>
-        <div class="tx-layer to"></div>
+    <div class="seam seam-balloon" data-seam aria-hidden="true">
+      <div class="seam-stage">
+        <div class="seam-fill"></div>
         <svg class="vehicle balloon b1"><use href="#i-balloon"/></svg>
         <svg class="vehicle balloon b2"><use href="#i-balloon"/></svg>
         <svg class="vehicle balloon b3"><use href="#i-balloon"/></svg>
-        <p class="tx-caption">Prendre de la hauteur</p>
       </div>
     </div>
 
@@ -302,14 +286,11 @@
       </div>
     </section>
 
-    <!-- TRANSITION VOILIER : la mer monte, le voilier prend le large -->
-    <div class="tx tx-yacht" data-tx aria-hidden="true">
-      <div class="tx-stage">
-        <div class="tx-layer from"></div>
-        <div class="tx-layer to"></div>
-        <div class="tx-waves"></div>
+    <div class="seam seam-yacht" data-seam aria-hidden="true">
+      <div class="seam-stage">
+        <div class="seam-fill"></div>
+        <div class="seam-waves"></div>
         <svg class="vehicle"><use href="#i-yacht"/></svg>
-        <p class="tx-caption">Bon voyage</p>
       </div>
     </div>
   </main>

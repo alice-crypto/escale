@@ -1,7 +1,7 @@
-// Transitions plein écran : pendant qu'on défile, chaque engin traverse l'écran
-// et dévoile la section suivante. On calcule ici la progression (--t) de chaque transition.
+// Coutures entre sections : pendant qu'on défile, chaque engin traverse la frontière
+// entre deux sections et la couleur suivante le suit. On calcule ici leur progression (--t).
 (() => {
-  const transitions = [...document.querySelectorAll("[data-tx]")];
+  const seams = [...document.querySelectorAll("[data-seam]")];
   const parallax = [...document.querySelectorAll("[data-parallax]")];
   const nav = document.querySelector(".nav");
   const root = document.documentElement;
@@ -25,13 +25,16 @@
   function update() {
     ticking = false;
     const vh = window.innerHeight;
-    for (const tx of transitions) {
-      const r = tx.getBoundingClientRect();
-      // 0 quand l'écran se fige, 1 quand il repart : l'engin fait toute sa traversée entre les deux.
-      const t = clamp(-r.top / (r.height - vh));
-      const fade = clamp(1 - Math.abs(t - 0.45) * 2.6);
-      tx.style.setProperty("--t", t.toFixed(4));
-      tx.style.setProperty("--fade", fade.toFixed(3));
+    const remaining = root.scrollHeight - vh - window.scrollY; // ce qu'il reste à défiler
+    for (const seam of seams) {
+      // 0 quand la frontière entre deux sections apparaît en bas de l'écran,
+      // 1 quand elle atteint le haut : l'engin traverse pendant ce temps.
+      // Près du bas de page, la traversée se termine quand on arrive tout en bas.
+      const y = seam.getBoundingClientRect().top;
+      const start = vh * 0.95;
+      const span = Math.max(1, Math.min(vh * 0.8, start - (y - remaining)));
+      const t = clamp((start - y) / span);
+      seam.style.setProperty("--t", t.toFixed(4));
     }
     const y = window.scrollY;
     for (const el of parallax) el.style.transform = `translateX(${(y * Number(el.dataset.parallax)).toFixed(1)}px)`;
