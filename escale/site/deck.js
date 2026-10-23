@@ -97,19 +97,19 @@
           { transform: "scaleY(.62)", offset: 1 },
         ]],
         [".v-ripple.r1", [
-          { width: "0vmax", height: "0vmax", opacity: 1, offset: 0 },
-          { width: "0vmax", height: "0vmax", opacity: 1, offset: 0.6, easing: "cubic-bezier(.55, 0, .25, 1)" },
-          { width: "300vmax", height: "300vmax", opacity: 1, offset: 1 },
+          { transform: "scale(0)", opacity: 1, offset: 0 },
+          { transform: "scale(0)", opacity: 1, offset: 0.6, easing: "cubic-bezier(.55, 0, .25, 1)" },
+          { transform: "scale(3)", opacity: 1, offset: 1 },
         ]],
         [".v-ripple.r2", [
-          { width: "0vmax", height: "0vmax", opacity: 1, offset: 0 },
-          { width: "0vmax", height: "0vmax", opacity: 1, offset: 0.66, easing: "cubic-bezier(.4, 0, .3, 1)" },
-          { width: "160vmax", height: "160vmax", opacity: 0, offset: 1 },
+          { transform: "scale(0)", opacity: 1, offset: 0 },
+          { transform: "scale(0)", opacity: 1, offset: 0.66, easing: "cubic-bezier(.4, 0, .3, 1)" },
+          { transform: "scale(1.6)", opacity: 0, offset: 1 },
         ]],
         [".v-ripple.r3", [
-          { width: "0vmax", height: "0vmax", opacity: 1, offset: 0 },
-          { width: "0vmax", height: "0vmax", opacity: 1, offset: 0.72, easing: "cubic-bezier(.4, 0, .3, 1)" },
-          { width: "90vmax", height: "90vmax", opacity: 0, offset: 1 },
+          { transform: "scale(0)", opacity: 1, offset: 0 },
+          { transform: "scale(0)", opacity: 1, offset: 0.72, easing: "cubic-bezier(.4, 0, .3, 1)" },
+          { transform: "scale(0.9)", opacity: 0, offset: 1 },
         ]],
       ],
     },
@@ -151,9 +151,9 @@
           { transform: "scale(1.6)", opacity: 0, offset: 1 },
         ]],
         [".v-ring", [
-          { width: "0vmax", height: "0vmax", opacity: 1, offset: 0 },
-          { width: "0vmax", height: "0vmax", opacity: 1, offset: 0.46, easing: "cubic-bezier(.55, 0, .25, 1)" },
-          { width: "300vmax", height: "300vmax", opacity: 1, offset: 1 },
+          { transform: "scale(0)", opacity: 1, offset: 0 },
+          { transform: "scale(0)", opacity: 1, offset: 0.46, easing: "cubic-bezier(.55, 0, .25, 1)" },
+          { transform: "scale(3)", opacity: 1, offset: 1 },
         ]],
       ],
     },
@@ -239,26 +239,32 @@
       fill: "both",
       direction: forward ? "normal" : "reverse",
     };
-    const wipeFrames = typeof tx.wipe === "function" ? tx.wipe() : wipes[tx.wipe]();
     const animations = [];
-    if (forward) {
-      next.classList.add("incoming");
-      animations.push(next.animate(wipeFrames, options));
-    } else {
-      next.classList.add("under");
-      current.classList.add("leaving");
-      animations.push(current.animate(wipeFrames, options));
-    }
     const shown = [];
-    for (const [sel, frames] of tx.vehicles) {
-      const el = $v(sel);
-      el.classList.add("show");
-      el.classList.toggle("flip", !forward && tx.horizontal);
-      shown.push(el);
-      animations.push(el.animate(frames, options)); // même rythme que le dévoilement
+    try {
+      const wipeFrames = typeof tx.wipe === "function" ? tx.wipe() : wipes[tx.wipe]();
+      if (forward) {
+        next.classList.add("incoming");
+        animations.push(next.animate(wipeFrames, options));
+      } else {
+        next.classList.add("under");
+        current.classList.add("leaving");
+        animations.push(current.animate(wipeFrames, options));
+      }
+      for (const [sel, frames] of tx.vehicles) {
+        const el = $v(sel);
+        if (!el) continue;
+        el.classList.add("show");
+        el.classList.toggle("flip", !forward && tx.horizontal);
+        shown.push(el);
+        animations.push(el.animate(frames, options)); // même rythme que le dévoilement
+      }
+      // Sécurité : si le téléphone n'arrive pas à finir l'animation, on passe quand même.
+      const timeout = new Promise((r) => setTimeout(r, options.duration + 1200));
+      await Promise.race([Promise.all(animations.map((a) => a.finished.catch(() => {}))), timeout]);
+    } catch (err) {
+      console.warn("Transition interrompue", err);
     }
-
-    await Promise.all(animations.map((a) => a.finished.catch(() => {})));
 
     current.classList.remove("active", "leaving");
     next.classList.remove("incoming", "under");
