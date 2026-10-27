@@ -2,7 +2,7 @@
 // Variables : WHATSAPP_TOKEN, WHATSAPP_PHONE_NUMBER_ID, WHATSAPP_APP_SECRET, WHATSAPP_VERIFY_TOKEN
 import crypto from "node:crypto";
 import { createConversation, deleteConversation, errorMessage, runAgentTurn } from "./agent.js";
-import { account, consumeCredit, creditsLeft, refundCredit } from "./usage.js";
+import { consume, creditsLeft, getAccount, markWelcomed, refund, restoreOrder } from "./store.js";
 
 const GRAPH_URL = process.env.WHATSAPP_GRAPH_URL || "https://graph.facebook.com/v26.0";
 const MAX_TURNS_PER_CONVERSATION = 10;
@@ -19,6 +19,17 @@ const WELCOME =
   "Dis-moi tes envies, par exemple :\n" +
   "_« 7 jours au soleil en décembre, 500 000 FCFA à deux depuis Douala »_\n\n" +
   "Je vérifie la météo réelle et les guides de voyage pour te conseiller.";
+
+const SITE_URL = (process.env.SITE_URL || "https://escale-site.onrender.com").replace(/\/$/, "");
+const RESTORE_ERRORS = {
+  introuvable: "Je ne trouve pas de paiement réussi avec cette référence. Vérifie-la (elle commence par ESC-).",
+  expire: "Cet abonnement est arrivé à son terme.",
+  limite: "Cette référence a déjà été utilisée sur 3 appareils.",
+};
+const leftText = (acc) => {
+  const n = creditsLeft(acc);
+  return n === null ? "⭐ Premium actif." : `Il te reste ${n} analyse(s) gratuite(s).`;
+};
 
 // État en mémoire (prototype). En production : une base de données.
 const chats = new Map(); // clé utilisateur → { conversationId, conversation, lastAt }
@@ -92,7 +103,7 @@ export function toWhatsApp(md) {
 async function handleMessage(msg) {
   const from = msg.from;
   const key = userKey(from);
-  const acc = account(key);
+  const acc = await getAccount(key);
 
   if (msg.type !== "text") {
     await sendText(from, "Pour l'instant, je ne lis que les messages écrits 🙂 Décris-moi ton voyage idéal !");
@@ -111,13 +122,21 @@ async function handleMessage(msg) {
   if (RESET_WORDS.has(text.toLowerCase())) {
     if (chat) deleteConversation(chat.conversationId);
     chats.delete(key);
-    await sendText(from, `🆕 Nouvelle conversation. Il te reste *${creditsLeft(acc)}* analyse(s). Décris-moi ton voyage !`);
+    await sendText(from, `🆕 Nouvelle conversation. ${leftText(acc)} Décris-moi ton voyage !`);
+    return;
+  }
+
+  // « restaurer ESC-… » : active ici un Premium acheté sur le site.
+  const restore = text.match(/^restaurer\s+(\S+)/i);
+  if (restore) {
+    const r = await restoreOrder(restore[1].toUpperCase(), key);
+    await sendText(from, r.ok ? "⭐ Escale Premium est activé sur ce numéro. Bon voyage !" : RESTORE_ERRORS[r.reason]);
     return;
   }
 
   // Tout premier message de cette personne : on se présente, sans consommer d'analyse.
-  if (acc.used === 0 && acc.paidCredits === 0 && !chat && !acc.welcomed) {
-    acc.welcomed = true;
+  if (acc.used === 0 && !chat && !acc.welcomed) {
+    await markWelcomed(acc);
     await sendText(from, WELCOME);
     if (text.length < 15) return; // un simple « bonjour » : on attend sa vraie demande
   }
@@ -125,11 +144,17 @@ async function handleMessage(msg) {
   // Une nouvelle conversation consomme une analyse.
   let consumed = null;
   if (!chat) {
-    consumed = consumeCredit(acc);
+    consumed = await consume(acc);
+    if (consumed === "limit") {
+      await sendText(from, "Tu as atteint la limite de 30 analyses pour aujourd'hui 🙂 On reprend demain !");
+      return;
+    }
     if (!consumed) {
       await sendText(
         from,
-        "Tes analyses gratuites sont terminées 🙏\nLes packs payants (5 analyses) arrivent très bientôt. Merci d'avoir essayé Escale !",
+        "Tes analyses gratuites sont terminées 🙏\n\n⭐ *Escale Premium* : analyses illimitées pendant 1 an pour 3 300 FCFA (5 €), " +
+          `payable par MTN ou Orange Money sur ${SITE_URL}/#essayer\n\n` +
+          "Après le paiement, écris ici : _restaurer_ suivi de ta référence (ESC-…).",
       );
       return;
     }
@@ -150,7 +175,7 @@ async function handleMessage(msg) {
     });
   } catch (err) {
     console.error(err);
-    refundCredit(acc, consumed);
+    await refund(acc, consumed);
     if (consumed) {
       deleteConversation(chat.conversationId);
       chats.delete(key);
@@ -161,7 +186,7 @@ async function handleMessage(msg) {
 
   let reply = error || toWhatsApp(answer);
   if (consumed && !error) {
-    reply += `\n\n_Il te reste ${creditsLeft(acc)} analyse(s). Écris « nouveau » pour parler d'un autre voyage._`;
+    reply += `\n\n_${leftText(acc)} Écris « nouveau » pour parler d'un autre voyage._`;
   }
   await sendText(from, reply);
 }

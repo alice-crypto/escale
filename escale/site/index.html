@@ -239,7 +239,7 @@
         <div class="chat-card">
           <div class="chat-head">
             <div class="brand small"><img src="icon.png" alt="" width="26" height="26"><span>Escale</span></div>
-            <span id="credits" class="credits">…</span>
+            <button id="credits" class="credits" type="button" title="Escale Premium">…</button>
           </div>
           <div id="chat" class="chat" aria-live="polite">
             <div class="msg agent">Bonjour ✨ Dites-moi où vous rêvez d'aller, quand, avec qui et votre budget. Je m'occupe du reste.</div>
@@ -250,8 +250,30 @@
             </div>
           </div>
           <div id="paywall" class="paywall" hidden>
-            <strong>Vos analyses gratuites sont terminées.</strong>
-            <p>Les packs payants arrivent très bientôt.</p>
+            <button id="pw-close" class="pw-close" type="button" aria-label="Fermer" hidden>✕</button>
+            <p id="pw-title" class="pw-title">Vos analyses gratuites sont terminées.</p>
+            <div class="offer-card">
+              <div class="offer-name">⭐ Escale Premium</div>
+              <div class="offer-price"><span id="pw-price">3 300 FCFA</span> <small>/ an · ≈ 5 €</small></div>
+              <ul class="offer-list">
+                <li>Analyses illimitées pendant 1 an</li>
+                <li>Site, extension Chrome et WhatsApp</li>
+                <li>Paiement unique, sans renouvellement automatique</li>
+              </ul>
+              <form id="buy" class="buy">
+                <input id="buy-email" type="email" required maxlength="200" placeholder="Votre e-mail (pour le reçu)" autocomplete="email">
+                <input id="buy-phone" type="tel" maxlength="20" placeholder="Téléphone Mobile Money (facultatif)" autocomplete="tel">
+                <button class="btn gold" type="submit">Payer par MTN · Orange Money</button>
+              </form>
+              <p id="buy-msg" class="pw-msg" aria-live="polite"></p>
+            </div>
+            <details class="restore">
+              <summary>Déjà payé sur un autre appareil ?</summary>
+              <form id="restore" class="buy">
+                <input id="restore-ref" required maxlength="40" placeholder="Référence ESC-…" autocapitalize="characters">
+                <button class="btn ghost" type="submit">Activer ici</button>
+              </form>
+            </details>
           </div>
           <form id="composer" class="composer">
             <textarea id="input" rows="1" maxlength="2000" placeholder="Décrivez votre voyage idéal…" aria-label="Votre message"></textarea>

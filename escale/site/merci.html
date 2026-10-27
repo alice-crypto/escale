@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Merci – Escale Premium</title>
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root { --night: #0b1426; --night-2: #13213d; --ivory: #f6f1e7; --muted-light: #b9b2a2; --gold: #c9a35b; --gold-light: #f3dfa8; --gold-deep: #9c7a3c; --line: rgba(201, 163, 91, .35); }
+    * { box-sizing: border-box; }
+    body { margin: 0; min-height: 100vh; min-height: 100svh; display: grid; place-items: center; padding: 24px 16px; background: radial-gradient(90% 70% at 50% 0%, var(--night-2), var(--night)); color: var(--ivory); font: 16px/1.6 Inter, system-ui, sans-serif; text-align: center; }
+    .card { width: 100%; max-width: 480px; padding: 36px 26px; border: 1px solid var(--line); border-radius: 28px; background: rgba(11, 20, 38, .6); box-shadow: 0 40px 80px -40px #000; }
+    .brand { display: inline-flex; align-items: center; gap: 10px; font: 600 22px "Cormorant Garamond", Georgia, serif; color: var(--gold-light); }
+    h1 { font: 600 40px/1.1 "Cormorant Garamond", Georgia, serif; margin: 22px 0 10px; }
+    h1 em { color: var(--gold); font-weight: 500; }
+    p { color: var(--muted-light); margin: 0 0 14px; }
+    .ref { display: inline-block; margin: 6px 0 4px; padding: 10px 20px; border: 1px dashed var(--gold); border-radius: 14px; font: 600 22px ui-monospace, Consolas, monospace; letter-spacing: .08em; color: var(--gold-light); user-select: all; }
+    .small { font-size: 13px; }
+    .btn { display: inline-flex; margin-top: 18px; padding: 14px 28px; border-radius: 999px; font-weight: 600; text-decoration: none; color: var(--night); background: linear-gradient(135deg, var(--gold-light), var(--gold) 55%, var(--gold-deep)); }
+    .spin { width: 34px; height: 34px; margin: 18px auto 6px; border: 3px solid var(--line); border-top-color: var(--gold); border-radius: 50%; animation: s 1s linear infinite; }
+    @keyframes s { to { transform: rotate(360deg); } }
+    [hidden] { display: none !important; }
+  </style>
+</head>
+<body>
+  <main class="card">
+    <div class="brand"><img src="icon.png" alt="" width="30" height="30">Escale</div>
+
+    <section id="wait">
+      <h1>Un instant…</h1>
+      <p>Nous confirmons votre paiement auprès de Mobile Money.</p>
+      <div class="spin" aria-hidden="true"></div>
+      <p class="small">Validez la demande reçue sur votre téléphone si ce n'est pas encore fait.</p>
+    </section>
+
+    <section id="ok" hidden>
+      <h1>Bienvenue en <em>Premium.</em></h1>
+      <p>Vos analyses sont illimitées jusqu'au <strong id="until"></strong>.</p>
+      <p class="small">Votre référence — gardez-la pour activer Premium dans l'extension Chrome, sur un autre appareil ou sur WhatsApp :</p>
+      <div class="ref" id="ref-ok"></div>
+    </section>
+
+    <section id="ko" hidden>
+      <h1>Paiement non abouti</h1>
+      <p id="ko-text">Le paiement a été annulé ou refusé. Aucun montant n'a été prélevé.</p>
+      <div class="ref" id="ref-ko"></div>
+    </section>
+
+    <a class="btn" href="index.html#essayer">Retour à Escale</a>
+  </main>
+
+  <script>
+    const SERVER_URL = "https://escale-luv4.onrender.com";
+    const params = new URLSearchParams(location.search);
+    const ref = params.get("ref") || params.get("reference") || "";
+    const $ = (id) => document.getElementById(id);
+    const show = (id) => ["wait", "ok", "ko"].forEach((s) => ($(s).hidden = s !== id));
+    $("ref-ok").textContent = $("ref-ko").textContent = ref;
+
+    let tries = 0;
+    async function check() {
+      tries += 1;
+      try {
+        const res = await fetch(`${SERVER_URL}/api/checkout/verify?reference=${encodeURIComponent(ref)}`);
+        const data = await res.json();
+        if (data.status === "paid") {
+          $("until").textContent = new Date(data.premiumUntil).toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" });
+          return show("ok");
+        }
+        if (data.status === "failed" || res.status === 404) return show("ko");
+      } catch { /* serveur en réveil : on réessaie */ }
+      if (tries < 40) setTimeout(check, 4000);
+      else {
+        $("ko-text").textContent = "Le paiement n'est pas encore confirmé. Si vous avez été débité, il sera activé automatiquement : écrivez-nous à yalakouam@gmail.com avec cette référence.";
+        show("ko");
+      }
+    }
+    if (ref) check();
+    else { $("ko-text").textContent = "Référence de paiement absente."; show("ko"); }
+  </script>
+</body>
+</html>

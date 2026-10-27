@@ -21,20 +21,80 @@ async function init() {
   await refreshCredits();
 }
 
+let left = null; // analyses gratuites restantes (null = Premium)
+
 async function refreshCredits() {
+  if (!userId) return;
   try {
     const res = await fetch(`${SERVER_URL}/api/status?userId=${userId}`);
-    const data = await res.json();
-    showCredits(data.creditsLeft);
+    showCredits(await res.json());
   } catch {
     $("credits").textContent = "hors ligne";
   }
 }
 
-function showCredits(n) {
-  $("credits").textContent = n === 1 ? "1 analyse" : `${n} analyses`;
-  $("paywall").hidden = n > 0;
+function showCredits({ creditsLeft, premium, premiumUntil, price }) {
+  left = premium ? null : creditsLeft;
+  $("credits").textContent = premium ? "⭐ Premium" : creditsLeft === 1 ? "1 analyse" : `${creditsLeft} analyses`;
+  $("credits").title = premium && premiumUntil
+    ? `Premium actif jusqu'au ${new Date(premiumUntil).toLocaleDateString("fr-FR")}`
+    : premium ? "Premium actif" : "Passer à Escale Premium";
+  if (price) $("pw-price").textContent = price.label.replace(" / an", "");
+  if (premium) openPaywall(false);
+  else if (creditsLeft <= 0) openPaywall(true, true);
 }
+
+function openPaywall(open, forced = false) {
+  $("paywall").hidden = !open;
+  $("pw-close").hidden = forced;
+  $("pw-title").innerHTML = forced ? "<strong>Tes analyses gratuites sont terminées.</strong>" : "<strong>Voyage sans compter, toute l'année.</strong>";
+}
+
+$("credits").addEventListener("click", () => {
+  if (left !== null) openPaywall($("paywall").hidden, left <= 0);
+});
+$("pw-close").addEventListener("click", () => openPaywall(false));
+
+async function postJson(path, body) {
+  const res = await fetch(`${SERVER_URL}${path}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data.error || `Erreur serveur (${res.status})`);
+  return data;
+}
+
+$("buy").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const button = e.target.querySelector("button");
+  button.disabled = true;
+  $("buy-msg").textContent = "Ouverture du paiement sécurisé…";
+  try {
+    const { url } = await postJson("/api/checkout", { userId, email: $("buy-email").value.trim() });
+    await chrome.tabs.create({ url }); // page de paiement Notch Pay dans un nouvel onglet
+    $("buy-msg").textContent = "Termine le paiement dans l'onglet ouvert : Premium s'activera ici automatiquement.";
+  } catch (err) {
+    $("buy-msg").textContent = err.message.includes("fetch") ? "Impossible de joindre le serveur Escale." : err.message;
+  } finally {
+    button.disabled = false;
+  }
+});
+
+$("restore").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  try {
+    showCredits(await postJson("/api/restore", { userId, reference: $("restore-ref").value.trim() }));
+    addMessage("agent", "⭐ Escale Premium est activé dans l'extension. Où partons-nous ?");
+  } catch (err) {
+    $("buy-msg").textContent = err.message;
+  }
+});
+
+// Au retour du paiement, on remet le compteur à jour.
+document.addEventListener("visibilitychange", () => document.visibilityState === "visible" && refreshCredits());
+window.addEventListener("focus", refreshCredits);
 
 // ---------- Lecture de la page ouverte ----------
 async function readCurrentPage() {
@@ -71,7 +131,12 @@ async function send({ message, page }) {
 
     if (res.status === 402) {
       status.remove();
-      showCredits(0);
+      showCredits(await res.json());
+      return;
+    }
+    if (res.status === 429 && (await res.clone().json().catch(() => ({}))).error === "daily_limit") {
+      status.remove();
+      addMessage("error", "Tu as atteint la limite de 30 analyses pour aujourd'hui. On reprend demain !");
       return;
     }
     if (res.status === 429) {
@@ -107,7 +172,7 @@ async function send({ message, page }) {
 function handleEvent(event, status) {
   if (event.type === "meta") {
     conversationId = event.conversationId;
-    showCredits(event.creditsLeft);
+    if (!event.premium) showCredits({ creditsLeft: event.creditsLeft });
   } else if (event.type === "status") {
     status.textContent = event.text;
   } else if (event.type === "answer") {

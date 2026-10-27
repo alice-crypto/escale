@@ -15,7 +15,7 @@
         <p class="tagline">Ton agent pour choisir où partir</p>
       </div>
     </div>
-    <span id="credits" class="credits" title="Analyses restantes">…</span>
+    <button id="credits" class="credits" type="button" title="Escale Premium">…</button>
   </header>
 
   <div class="actions">
@@ -32,8 +32,23 @@
   </main>
 
   <section id="paywall" class="paywall" hidden>
-    <p><strong>Tes analyses gratuites sont terminées.</strong></p>
-    <p>Les packs payants (5 analyses pour 2,99 $) arrivent très bientôt dans une mise à jour.</p>
+    <button id="pw-close" class="pw-close" type="button" aria-label="Fermer" hidden>✕</button>
+    <p id="pw-title"><strong>Tes analyses gratuites sont terminées.</strong></p>
+    <p class="offer-name">⭐ Escale Premium</p>
+    <p class="offer-price"><span id="pw-price">3 300 FCFA</span> / an · ≈ 5 €</p>
+    <p class="small">Analyses illimitées pendant 1 an · paiement unique, sans renouvellement automatique</p>
+    <form id="buy" class="buy">
+      <input id="buy-email" type="email" required maxlength="200" placeholder="Ton e-mail (pour le reçu)" autocomplete="email">
+      <button class="primary" type="submit">Payer par MTN · Orange Money</button>
+    </form>
+    <p id="buy-msg" class="small" aria-live="polite"></p>
+    <details class="restore">
+      <summary>Déjà payé sur le site ?</summary>
+      <form id="restore" class="buy">
+        <input id="restore-ref" required maxlength="40" placeholder="Référence ESC-…">
+        <button class="ghost" type="submit">Activer ici</button>
+      </form>
+    </details>
   </section>
 
   <form id="composer">

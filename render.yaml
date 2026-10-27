@@ -21,6 +21,16 @@ services:
         sync: false
       - key: WHATSAPP_VERIFY_TOKEN
         generateValue: true
+      - key: DATABASE_URL
+        sync: false
+      - key: NOTCHPAY_PUBLIC_KEY
+        sync: false
+      - key: NOTCHPAY_HASH_KEY
+        sync: false
+      - key: PREMIUM_PRICE_XAF
+        value: "3300"
+      - key: SITE_URL
+        value: https://escale-site.onrender.com
 
   - type: web
     name: escale-site

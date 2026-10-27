@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Escale – ton agent vacances",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Un agent IA qui analyse la page de voyage que tu regardes et t'aide à choisir ta destination.",
   "action": {
     "default_title": "Ouvrir Escale",
